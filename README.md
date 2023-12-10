@@ -1,36 +1,17 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+### <div align="center"> Aplicativo Web Personalizado para FUMDIR: Simplificando la Gestión de Hojas de Vida y Archivos PDF </div>
 
-## Getting Started
+Este aplicativo web para la [Fundación Misionera Divina Redención San Felipe Neri (FUMDIR)](https://fumdir.org). Está diseñada con el objetivo principal de agilizar la elaboración de hojas de vida y la unión de múltiples archivos PDF, todo adaptado a las necesidades específicas del cliente. 
 
-First, run the development server:
+Mi enfoque ha sido brindar una herramienta intuitiva y eficiente que simplifique este proceso, ofreciendo una experiencia óptima y personalizada para cada usuario.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Tecnologías Utilizadas:
+- **Next.js** para el desarrollo del aplicativo web.
+- La librería **pdf-lib** para la manipulación de archivos PDF.
+- Estilos personalizados implementados con **Tailwind CSS**.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+El aplicativo no hace uso de una base de datos y se enfoca en recibir datos de usuario para generar hojas de vida en PDF con un diseño estándar. Además, facilita la unión de otros archivos PDF según las solicitud del cliente. Una vez generados, los documentos se descargan automáticamente, permitiendo al usuario enviarlos posteriormente.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Se contempla la implementación de una función que habilite el envío automatizado del PDF generado por correo electrónico, evitando así que el usuario tenga que hacerlo manualmente.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
