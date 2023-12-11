@@ -1,6 +1,6 @@
 'use client'
 
-const { PDFDocument, rgb, PageSizes, StandardFonts, degrees } = require('pdf-lib')
+const { PDFDocument, rgb, PageSizes, StandardFonts, degrees, TextAlignment } = require('pdf-lib')
 
 import { fetchIcons, imgPDFProfile } from './imgToPDFImage';
 
@@ -17,10 +17,10 @@ const createPDF = async (userData, { imgProfile }) => {
 
   // Formatos
   const { width, height } = page.getSize();
-  const fontTitleSize = 16;
+  const fontTitleSize = 25;
   const fontSubtitlesSize = 14;
-  const fontText = 13.5;
-  const fontDate = 12;
+  const fontText = 12;
+  const fontDate = 10.5;
 
   // Icons
   const iconContact = await fetchIcons(iconContactPng.src, pdfDoc)
@@ -170,7 +170,7 @@ const createPDF = async (userData, { imgProfile }) => {
   // Experiencia Laboral
   page.drawText('EXPERIENCIA LABORAL',{
     x: 230,
-    y: 580,
+    y: 560,
     size: fontSubtitlesSize,
     font: helveticaFontBold,
     color: rgb(0, 0, 0)
@@ -189,8 +189,6 @@ const createPDF = async (userData, { imgProfile }) => {
 
 //!TODO ---*---*---*---*---*---*---*--- Datos traídos del Usuario ---*--*---*---*---*---*---*---*---*
 
-console.log(width)
-console.log(height)
   // Imagen de perfil
   page.drawImage(PDFImageProfile, {
     x: 44,
@@ -199,13 +197,78 @@ console.log(height)
     height: imgProfileScale.height,
   })
 
-  // page.drawText(userData.userName,{
-  //   x: 10,
-  //   y: 5,
-  //   size: fontSize,
-  //   font: helveticaFont,
-  //   color: rgb(0.129, 0.271, 0.502)
-  // })
+  // Contact
+  page.drawText(userData.phone, {
+    x: 55,
+    y: 555,
+    font: helveticaFont,
+    size: fontText,
+    color: rgb(0, 0, 0),
+  })
+
+  // Age + Identification
+  page.drawText(`${userData.age} años - ${userData.cc}`, {
+    x: 55,
+    y: 524,
+    font: helveticaFont,
+    size: fontText,
+    color: rgb(0, 0, 0),
+  })
+
+  // Email
+  page.drawText(userData.email, {
+    x: 55,
+    y: 494,
+    font: helveticaFont,
+    size: userData.email.length > 25 ? fontDate : fontText,
+    color: rgb(0, 0, 0),
+  })
+
+  // Address
+  page.drawText(userData.address, {
+    x: 55,
+    y: 460,
+    font: helveticaFont,
+    size: userData.address.length > 25 ? fontDate : fontText,
+    color: rgb(0, 0, 0),
+  })
+
+  // Name
+  page.drawText(userData.userName, {
+    x: 265,
+    y: 790,
+    maxWidth: 260,
+    font: helveticaFontBold,
+    size: fontTitleSize,
+    color: rgb(0, 0, 0),
+  })
+
+  // Profession
+  page.drawText(userData.profession, {
+    x: 265,
+    y: 745,
+    font: helveticaFont,
+    size: fontSubtitlesSize,
+    color: rgb(0, 0, 0),
+  }) // máximo 43 caracteres
+
+  // Profile
+  page.drawText(userData.profile, {
+    x: 230,
+    y: 695,
+    maxWidth: 350,
+    lineHeight: 15,
+    font: helveticaFont,
+    size: fontText,
+    color: rgb(0, 0, 0),
+  }) // máximo 500 caracteres
+
+  console.log(userData.profile.length)
+
+console.log(width)
+console.log(height)
+
+//!TODO ---*---*---*---*---*---*---*---*---*---*---*--*---*---*---*---*---*---*---*---*---*---*---*---*
 
   const pdfBytes = await pdfDoc.save();
   return pdfBytes;

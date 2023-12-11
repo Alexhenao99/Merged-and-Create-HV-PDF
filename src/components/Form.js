@@ -135,6 +135,7 @@ const Form = () => {
   // Llama a renderPdf cuando pdfMerged se actualice
   useEffect(() => {
     renderPdf();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pdfMerged]);
 
   return (

@@ -1,5 +1,4 @@
 import Form from '@/components/Form';
-import UploadFiles from '@/components/UploadFiles';
 
 const Home = () =>  {
   return (
@@ -7,7 +6,6 @@ const Home = () =>  {
       <h1>Adjunta tus datos</h1>
       <h3>Fundación misionera Divina Redención San Felipe Neri</h3>
       <Form />
-      <UploadFiles />
     </main>
   )
 }
