@@ -46,6 +46,7 @@ const AcademicBackground = ({ onAcademicHistoryChange }) => {
               name='graduationDate'
               value={history.graduationDate}
               onChange={(e) => handleAcademicHistoryData(index, e)}
+              required
             />
           </label>
           <label>
@@ -56,6 +57,7 @@ const AcademicBackground = ({ onAcademicHistoryChange }) => {
               placeholder='Titulo'
               value={history.title}
               onChange={(e) => handleAcademicHistoryData(index, e)}
+              required
             />
           </label>
           <label>
@@ -66,6 +68,7 @@ const AcademicBackground = ({ onAcademicHistoryChange }) => {
               placeholder='Nombre de la institución'
               value={history.institution}
               onChange={(e) => handleAcademicHistoryData(index, e)}
+              required
             />
           </label>
           <label>
@@ -74,6 +77,7 @@ const AcademicBackground = ({ onAcademicHistoryChange }) => {
               type='file'
               onChange={(e) => handleAcademicHistoryFile(index, e)}
               accept='.pdf'
+              required
             />
           </label>
           {academicHistory.length > 1 && (

@@ -140,6 +140,7 @@ const Form = () => {
             id='imgProfile'
             name='imgProfile'
             accept='image/*'
+            required
           />
         </label>
         <label htmlFor='userName'>
