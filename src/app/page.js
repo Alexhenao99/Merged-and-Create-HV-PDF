@@ -1,8 +1,8 @@
-import Form from '@/components/Form';
+import Form from '@/components/Form'
 
-const Home = () =>  {
+const Home = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
+    <main className='flex min-h-screen flex-col items-center p-24'>
       <h1>Adjunta tus datos</h1>
       <h3>Fundación misionera Divina Redención San Felipe Neri</h3>
       <Form />
@@ -10,4 +10,4 @@ const Home = () =>  {
   )
 }
 
-export default Home;
+export default Home
