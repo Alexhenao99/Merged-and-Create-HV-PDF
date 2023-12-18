@@ -2,7 +2,10 @@
 
 import { createPDF, mergePDFS } from '@/utils/functionsPDFS'
 import { useEffect, useState } from 'react'
-import AcademicBackground from './AcademicBackground'
+import FormAcademicBackground from './FormAcademicBackground'
+import FormWorkHistory from './FormWorkHistory'
+import { orderData, orderPDFs } from '@/utils/oderPDFs'
+import FormPersonalReference from './FormPersonalReferences'
 
 const Form = () => {
   // ----------
@@ -23,7 +26,9 @@ const Form = () => {
     cc: '',
     email: '',
     address: '',
-    academicHistory: []
+    academicHistory: [],
+    workHistory: [],
+    personalReferences: []
   })
 
   const handleFile = (e) => {
@@ -54,30 +59,67 @@ const Form = () => {
     })
   }
 
+  const handleAcademicHistoryChange = (updatedAcademicHistory) => {
+    setUserData({
+      ...userData,
+      academicHistory: updatedAcademicHistory
+    })
+  }
+
+  const handleWorkHistoryChange = (updatedWorkHistory) => {
+    setUserData({
+      ...userData,
+      workHistory: updatedWorkHistory
+    })
+  }
+
+  const handlePersonalReferencesChange = (updatedPersonalReferences) => {
+    setUserData({
+      ...userData,
+      personalReferences: updatedPersonalReferences
+    })
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const fileObject = {
-      militaryPassbook: fileReferences.militaryPassbook,
-      identificationScan: fileReferences.identificationScan
-    }
+    let fileObject =
+      userData.biologicalSex === 'men'
+        ? {
+            identificationScan: fileReferences.identificationScan,
+            militaryPassbook: fileReferences.militaryPassbook
+          }
+        : {
+            identificationScan: fileReferences.identificationScan
+          }
 
-    // Ordena la formación académica por fecha
-    const certificatesOrdered = userData.academicHistory.sort((a, b) => {
-      const dateA = new Date(a.graduationDate)
-      const dateB = new Date(b.graduationDate)
-      return dateB - dateA
+    // filtra y ordena los certificados académicos
+    const academicPDFs = orderPDFs(userData.academicHistory)
+    setUserData({
+      ...userData,
+      academicHistory: orderData(userData.academicHistory)
     })
 
-    // filtra los certificados
-    const soloPDFs = certificatesOrdered.map((certificate) => certificate.diplomaPDF)
-
     // Agrega los certificados en el fileObject en orden
-    for (let i = 0; i < Math.min(soloPDFs.length, 5); i++) {
-      const property = `certificate${i + 1}` // Propiedades como academic1, academic2, etc.
-      fileObject[property] = soloPDFs[i]
+    for (let i = 0; i < Math.min(academicPDFs.length, 4); i++) {
+      const property = `academic${i + 1}` // Propiedades como academic1, academic2, etc.
+      fileObject[property] = academicPDFs[i]
     }
 
+    // filtra los certificados académicos
+    const workPDFs = orderPDFs(userData.workHistory)
+    setUserData({
+      ...userData,
+      workHistory: orderData(userData.workHistory)
+    })
+    // Agrega los certificados en el fileObject en orden
+    for (let i = 0; i < Math.min(workPDFs.length, 4); i++) {
+      const property = `work${i + 1}` // Propiedades como academic1, academic2, etc.
+      fileObject[property] = workPDFs[i]
+    }
+
+    console.log(userData)
+    console.log(fileObject)
     // Crea el PDF
     const pdfCreateBytes = await createPDF(userData, imgProfile)
 
@@ -94,7 +136,8 @@ const Form = () => {
     // document.body.removeChild(a);
   }
 
-  // ---------------------
+  //! ------------------------------------------------------------------------------------------------------------
+
   const renderPdf = async () => {
     if (pdfMerged instanceof Blob) {
       const pdfUrl = URL.createObjectURL(pdfMerged)
@@ -118,15 +161,11 @@ const Form = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pdfMerged])
 
-  const handleAcademicHistoryChange = (updatedAcademicHistory) => {
-    setUserData({
-      ...userData,
-      academicHistory: updatedAcademicHistory
-    })
-  }
+  //! --------------------------------------------------------------------------------------------------------------
 
   return (
     <section>
+      <h2> Datos Personales </h2>
       <form
         onSubmit={handleSubmit}
         encType='multipart/form-data'
@@ -261,6 +300,15 @@ const Form = () => {
             required
           ></textarea>
         </label>
+        <section>
+          <FormAcademicBackground onAcademicHistoryChange={handleAcademicHistoryChange} />
+        </section>
+        <section>
+          <FormWorkHistory onWorkHistoryChange={handleWorkHistoryChange} />
+        </section>
+        <section>
+          <FormPersonalReference onPersonalReference={handlePersonalReferencesChange} />
+        </section>
         <label htmlFor='identificationScan'>
           Cédula de Ciudadanía: <span className='text-gray'>Escaneada a color al 150% </span>
           <input
@@ -283,9 +331,6 @@ const Form = () => {
             />
           </label>
         ) : null}
-        <section>
-          <AcademicBackground onAcademicHistoryChange={handleAcademicHistoryChange} />
-        </section>
         <input
           type='submit'
           value='Terminar'

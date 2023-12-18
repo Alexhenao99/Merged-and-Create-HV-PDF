@@ -4,7 +4,7 @@ const { PDFDocument, rgb, PageSizes, StandardFonts, degrees, TextAlignment } = r
 import { fetchIcons, imgPDFProfile } from './imgToPDFImage'
 
 // Imp. funciones
-import { insertOnePage } from './insertOnPage'
+import { insertOnePage } from './insertOnePage'
 import pageDesign from './pageDesign'
 
 // Imp. iconos
@@ -20,7 +20,6 @@ const createPDF = async (userData, { imgProfile }) => {
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
   const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
 
-  // const { width, height } = page.getSize();
   console.log(userData)
 
   // Icons
