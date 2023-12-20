@@ -14,8 +14,6 @@ const FormWorkHistory = ({ onWorkHistoryChange }) => {
     }
   ])
 
-  console.log(workHistory)
-
   const handleWorkHistoryData = (index, e) => {
     const { name, value } = e.target
     const updatedWorkHistory = [...workHistory]
