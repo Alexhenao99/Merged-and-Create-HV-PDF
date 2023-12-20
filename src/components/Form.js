@@ -307,7 +307,7 @@ const Form = () => {
           <FormWorkHistory onWorkHistoryChange={handleWorkHistoryChange} />
         </section>
         <section>
-          <FormPersonalReference onPersonalReference={handlePersonalReferencesChange} />
+          <FormPersonalReference onPersonalReferenceChange={handlePersonalReferencesChange} />
         </section>
         <label htmlFor='identificationScan'>
           Cédula de Ciudadanía: <span className='text-gray'>Escaneada a color al 150% </span>
