@@ -1,4 +1,7 @@
-export const insertOnePage = (page, rgb, userData, yStartLeft, yStartRight, font, fontBold, iconContact, iconDate, iconIdentification, iconEmail, iconAddress, PDFImageProfile) => {
+import { PageSizes, rgb, degrees } from 'pdf-lib'
+import pageDesign from './pageDesign'
+
+export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, font, fontBold, iconContact, iconDate, iconIdentification, iconEmail, iconAddress, PDFImageProfile) => {
   // Escalas
   const iconContactScale = iconContact.scaleToFit(25, 25)
   const iconDateScale = iconDate.scaleToFit(25, 25)
@@ -10,7 +13,7 @@ export const insertOnePage = (page, rgb, userData, yStartLeft, yStartRight, font
   // Formatos
   let yLeft = yStartLeft
   let yRight = yStartRight
-  const maxWidth = 350
+  const maxWidth = 300
   const fontTitleSize = 25
   const fontSubtitlesSize = 14
   const fontTextSize = 12
@@ -174,6 +177,8 @@ export const insertOnePage = (page, rgb, userData, yStartLeft, yStartRight, font
     yLeft -= academic.institution.length > 30 ? lineHeight * 3 : lineHeight * 2
   })
 
+  console.log(yLeft)
+
   //* ---------------------------------------------- Right ---------------------------------------------- *\\
 
   //!TODO Name //
@@ -220,19 +225,88 @@ export const insertOnePage = (page, rgb, userData, yStartLeft, yStartRight, font
   const profileHeight = estimateTextHeight(userData.profile, font, fontTextSize, maxWidth, lineHeight)
   yRight -= profileHeight + division
 
-  //? Text Referencias //
-  page.drawText('REFERENCIAS PERSONALES', {
-    x: 230,
-    y: 160,
-    size: fontSubtitlesSize,
-    font: fontBold,
-    color: rgb(0, 0, 0)
-  })
-
   //? Experiencia Laboral //
   page.drawText('EXPERIENCIA LABORAL', {
     x: 230,
     y: yRight,
+    size: fontSubtitlesSize,
+    font: fontBold,
+    color: rgb(0, 0, 0)
+  })
+  yRight -= division
+
+  //!TODO Experiencia Laboral //
+  userData.workHistory.map((work) => {
+    if (yRight <= 200) {
+      page = pdfDoc.addPage(PageSizes.A4)
+      pageDesign(page, rgb, degrees)
+      yRight = 760
+    }
+    page.drawText(work.company, {
+      x: 230,
+      y: yRight,
+      maxWidth: maxWidth,
+      lineHeight: lineHeight,
+      font: fontBold,
+      size: fontSubtitlesSize,
+      color: rgb(0, 0, 0)
+    })
+    const companyHeight = estimateTextHeight(work.company, fontBold, fontTextSize, maxWidth, lineHeight)
+    yRight -= companyHeight
+    page.drawText(work.workstation, {
+      x: 230,
+      y: yRight,
+      maxWidth: maxWidth,
+      font: font,
+      size: fontSubtitlesSize,
+      color: rgb(0, 0, 0)
+    })// 60 caracteres
+    yRight -= lineHeight
+    page.drawText(`${work.startDate} - ${work.finishDate}`, {
+      x: 230,
+      y: yRight,
+      maxWidth: maxWidth,
+      lineHeight: lineHeight,
+      font: font,
+      size: fontDate,
+      color: rgb(0, 0, 0)
+    })// 60 caracteres
+    yRight -= lineHeight
+    page.drawText(work.directSupervisor, {
+      x: 230,
+      y: yRight,
+      maxWidth: maxWidth,
+      font: font,
+      size: fontDate,
+      color: rgb(0, 0, 0)
+    })
+    yRight -= lineHeight
+    page.drawText(work.contactSupervisor, {
+      x: 230,
+      y: yRight,
+      maxWidth: maxWidth,
+      font: font,
+      size: fontDate,
+      color: rgb(0, 0, 0)
+    })
+    yRight -= lineHeight
+    page.drawText(work.functions, {
+      x: 230,
+      y: yRight,
+      maxWidth: maxWidth,
+      lineHeight: lineHeight,
+      font: font,
+      size: fontDate,
+      color: rgb(0, 0, 0)
+    })
+    const functionHeight = estimateTextHeight(work.functions, font, fontTextSize, maxWidth, lineHeight)
+    yRight -= functionHeight
+  })
+
+  //? Text Referencias //
+  page.drawText('REFERENCIAS PERSONALES', {
+    x: 230,
+    y: yRight - 20,
     size: fontSubtitlesSize,
     font: fontBold,
     color: rgb(0, 0, 0)
