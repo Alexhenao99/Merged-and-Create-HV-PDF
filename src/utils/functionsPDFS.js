@@ -1,6 +1,6 @@
 'use client'
 
-const { PDFDocument, rgb, PageSizes, StandardFonts, degrees, TextAlignment } = require('pdf-lib')
+const { PDFDocument, rgb, PageSizes, StandardFonts, degrees } = require('pdf-lib')
 import { fetchIcons, imgPDFProfile } from './imgToPDFImage'
 
 // Imp. funciones
@@ -40,7 +40,7 @@ const createPDF = async (userData, { imgProfile }) => {
   pageDesign(page, rgb, degrees)
 
   // Insertar datos
-  insertOnePage(page, rgb, userData, yStartLeft, yStartRight, font, fontBold, iconContact, iconDate, iconIdentification, iconEmail, iconAddress, PDFImageProfile)
+  insertOnePage(pdfDoc, page, userData, yStartLeft, yStartRight, font, fontBold, iconContact, iconDate, iconIdentification, iconEmail, iconAddress, PDFImageProfile)
 
   const pdfBytes = await pdfDoc.save()
   return pdfBytes
