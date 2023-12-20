@@ -4,7 +4,7 @@ import { createPDF, mergePDFS } from '@/utils/functionsPDFS'
 import { useEffect, useState } from 'react'
 import FormAcademicBackground from './FormAcademicBackground'
 import FormWorkHistory from './FormWorkHistory'
-import { orderData, orderPDFs } from '@/utils/oderPDFs'
+import { orderData, orderPDFs } from '@/utils/orderPDFs'
 import FormPersonalReference from './FormPersonalReferences'
 
 const Form = () => {
