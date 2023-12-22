@@ -311,6 +311,58 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
     font: fontBold,
     color: rgb(0, 0, 0)
   })
+  yRight -= division + 20
+
+  //!TODO Referencias personales //
+  page.drawText(userData.personalReferences[0].name, {
+    x: 230,
+    y: yRight,
+    size: fontSubtitlesSize,
+    font: fontBold,
+    color: rgb(0, 0, 0)
+  }) // max 16 caracteres
+  yRight -= lineHeight
+  page.drawText(userData.personalReferences[0].profession, {
+    x: 230,
+    y: yRight,
+    size: fontSubtitlesSize,
+    font: font,
+    color: rgb(0, 0, 0)
+  })
+  yRight -= lineHeight
+  page.drawText(userData.personalReferences[0].contact, {
+    x: 230,
+    y: yRight,
+    size: fontSubtitlesSize,
+    font: font,
+    color: rgb(0, 0, 0)
+  })
+  yRight -= lineHeight
+
+  //!TODO Referencias personales 2//
+  page.drawText(userData.personalReferences[0].name2, {
+    x: 420,
+    y: yRight + 45,
+    size: fontSubtitlesSize,
+    font: fontBold,
+    color: rgb(0, 0, 0)
+  })// max 16 caracteres
+  yRight -= lineHeight
+  page.drawText(userData.personalReferences[0].profession2, {
+    x: 420,
+    y: yRight + 45,
+    size: fontSubtitlesSize,
+    font: font,
+    color: rgb(0, 0, 0)
+  })
+  yRight -= lineHeight
+  page.drawText(userData.personalReferences[0].contact2, {
+    x: 420,
+    y: yRight +45,
+    size: fontSubtitlesSize,
+    font: font,
+    color: rgb(0, 0, 0)
+  })
   yRight -= lineHeight
 }
 
