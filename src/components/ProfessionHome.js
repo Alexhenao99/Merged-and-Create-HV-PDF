@@ -1,13 +1,11 @@
 'use client'
 
+import { professions } from '@/utils/professions'
 import Link from 'next/link'
 import { useState } from 'react'
 
-const ProfessionHome = () => {
-  const professionData = {
-    tecnologo_Ambiental: 'Tecnológo Ambiental',
-    auxiliar_Enfermeria: 'Auxiliar de Enfermería'
-  }
+ export const ProfessionHome = () => {
+  const professionData = professions
 
   const [selectedProfession, setSelectedProfession] = useState('')
 
