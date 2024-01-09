@@ -9,7 +9,11 @@ module.exports = {
       light_blue: '#ebf7ff',
       dark_blue: '#0054ff',
       green: '#caff00',
-      yellow: '#caff00'
+      yellow: '#caff00',
+      blue_title: '#005791',
+      blue_button: '#4175FC',
+      blue_button_hover: '#084af3',
+      red: '#E5322D'
     }
   },
   plugins: [],
