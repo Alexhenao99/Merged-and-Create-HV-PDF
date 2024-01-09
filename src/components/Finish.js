@@ -12,6 +12,7 @@ const Finish = () => {
       const data = localStorage.getItem('userData')
       data ? setUserData(JSON.parse(data)) : router.replace('/not_found')
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // if (!userData) {
