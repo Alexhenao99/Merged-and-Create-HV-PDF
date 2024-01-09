@@ -1,8 +1,14 @@
 'use client'
-import { quantum } from 'ldrs'
 
-const loading = () => {
-  quantum.register()
+import { useEffect } from 'react';
+
+const Loading = () => {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const { quantum } = require('ldrs');
+      quantum.register();
+    }
+  }, []);
 
   return (
     <div className='flex h-screen items-center justify-center'>
@@ -12,7 +18,8 @@ const loading = () => {
         color='#005791'
       ></l-quantum>
     </div>
-  )
-}
+  );
+};
 
-export default loading
+export default Loading;
+
