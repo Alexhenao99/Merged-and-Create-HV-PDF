@@ -8,26 +8,21 @@ const Finish = () => {
   const [userData, setUserData] = useState(null)
 
   useEffect(() => {
-    const data = localStorage.getItem('userData')
-    data ? setUserData(JSON.parse(data)) : null
+    if (typeof window !== 'undefined') {
+      const data = localStorage.getItem('userData')
+      data ? setUserData(JSON.parse(data)) : router.replace('/not_found')
+    }
   }, [])
 
-  // Si no hay datos, redirige a la página de error 404
-  if (!userData) {
-    // Esto redirigirá a la página de error 404
-    router.replace('/not_found');
-    return null;
-  }
-
-  window.addEventListener('beforeunload', function () {
-    localStorage.clear() // Limpia todo el localStorage al cerrar la página
-  })
+  // if (!userData) {
+  //   return null; // Evita renderizar cualquier contenido si no hay datos de usuario
+  // }
 
   return (
     <main className='flex min-h-screen flex-col items-center p-24'>
       <h1>Gracias por haber diligenciado el Formulario</h1>
       <p>
-        El PDF que se descargó, envíelo a <a href={`mailto:waha0522@gmail.com?subject=HV de ${userData.name} - ${userData.profession}`}>waha0522@gmail.com</a>
+        El PDF que se descargó, envíelo a <a href={`mailto:waha0522@gmail.com?subject=HV de ${userData?.name} - ${userData?.profession}`}>waha0522@gmail.com</a>
       </p>
     </main>
   )
