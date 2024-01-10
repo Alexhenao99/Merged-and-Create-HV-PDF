@@ -32,7 +32,7 @@ const Finish = () => {
       </a>
       <h1>Su Hoja de Vida ah sido descargada, ¡Gracias por diligenciar el formulario!</h1>
       <p>
-        El archivo PDF se ha descargado en su dispositivo con el nombre <span className='text-blue_button'> CV de {userData?.userName} - {userData?.profession}.pdf </span>.
+        El archivo PDF se ha descargado en su dispositivo con el nombre <span className='text-blue_button'> CV de {userData?.name} - {userData?.profession}.pdf </span>.
       </p>
       <p>
         Por favor, envié el archivo al siguiente correo haciendo clic en el enlace: <a className='text-blue_button hover:text-blue_button_hover underline' href={`mailto:waha0522@gmail.com?subject=HV de ${userData?.name} - ${userData?.profession}`}>alexanderhenao0522@gmail.com</a>
