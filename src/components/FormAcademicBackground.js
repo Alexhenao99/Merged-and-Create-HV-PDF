@@ -110,7 +110,7 @@ const FormAcademicBackground = ({ onAcademicHistoryChange }) => {
             onClick={handleAddAcademicHistory}
             className='mx-auto'
           >
-            Agregar
+            Agregar Formación
           </button>
         )}
       </section>

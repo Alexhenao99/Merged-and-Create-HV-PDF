@@ -14,8 +14,6 @@ const Form = ({ profession }) => {
   const router = useRouter()
   const professionData = professions
 
-  const [pdfMerged, setPdfMerged] = useState(null)
-
   const [fileReferences, setFileReferences] = useState({
     identificationScan: null,
     militaryPassbook: null,
@@ -263,7 +261,7 @@ const Form = ({ profession }) => {
         <h2> Datos Personales </h2>
         <section
           id='userData'
-          className='flex flex-col md:flex-row md:flex-wrap justify-between mx-auto md:w-3/4'
+          className='flex flex-col md:flex-row md:flex-wrap justify-between mx-auto md:w-3/4 md:max-w-[60rem]'
           >
           <label htmlFor='imgProfile' className='text-lg'>
             Foto de Perfil:
@@ -371,7 +369,7 @@ const Form = ({ profession }) => {
                 id='woman'
                 name='biologicalSex'
                 value='woman'
-                className='w-5'
+                className='w-[13px] mr-4'
               />
               Femenino
             </label>
@@ -382,7 +380,7 @@ const Form = ({ profession }) => {
                 id='men'
                 name='biologicalSex'
                 value='men'
-                className='w-5'
+                className='w-[13px] mr-4'
               />
               Masculino
             </label>
@@ -505,102 +503,98 @@ const Form = ({ profession }) => {
           {/*//? --------------------------------------------------------- */}
           {/*//! --------- Food handling ------------------------------------------- */}
             {profession === 'manipulador_Alimentos' ? (
-              <section
-                id='foodHandling'
-                className='flex flex-col'
-              >
-              {/*//? ----- Certificado manipulación de alimentos -------------- */}
-                <label htmlFor='professionalCardFoodHandling' className='block text-base'>
-                Certificado manipulación de alimentos:
-                  <input
-                    type='file'
-                    onChange={handleFile}
-                    id='professionalCardFoodHandling'
-                    name='professionalCardFoodHandling'
-                    accept='.pdf'
-                      required
-                    />
-                </label>
-              {/*//? ---------------------------------------------------------- */}
-              {/*//? ----- Certificado médico general ------------------------- */}
-                <label htmlFor='generalMedicalCertificate' className='block text-base'>
-                  Certificado médico general:
-                  <input
-                    type='file'
-                    onChange={handleFile}
-                    id='generalMedicalCertificate'
-                    name='generalMedicalCertificate'
-                    accept='.pdf'
-                      required
-                    />
-                </label>
-              {/*//? ---------------------------------------------------------- */}
-              {/*//? ----- Diagnóstico sintomático respiratorio y de piel ----- */}
-                <label htmlFor='symptomaticDiagnosis' className='block text-base'>
-                  Diagnóstico sintomático respiratorio y de piel en la cual conste la aptitud para la manipulación de alimentos:
-                  <input
-                    type='file'
-                    onChange={handleFile}
-                    id='symptomaticDiagnosis'
-                    name='symptomaticDiagnosis'
-                    accept='.pdf'
-                      required
-                    />
-                </label>
-              {/*//? ---------------------------------------------------------- */}
-              </section>
+              //? ----- Certificado manipulación de alimentos -------------- */}
+              <label htmlFor='professionalCardFoodHandling' className='block text-base'>
+              Certificado manipulación de alimentos:
+                <input
+                  type='file'
+                  onChange={handleFile}
+                  id='professionalCardFoodHandling'
+                  name='professionalCardFoodHandling'
+                  accept='.pdf'
+                    required
+                  />
+              </label>
+              //? ---------------------------------------------------------- */}
+            )  : null}
+            {profession === 'manipulador_Alimentos' ? (
+              //? ----- Certificado médico general ------------------------- */}
+              <label htmlFor='generalMedicalCertificate' className='block text-base'>
+                Certificado médico general:
+                <input
+                  type='file'
+                  onChange={handleFile}
+                  id='generalMedicalCertificate'
+                  name='generalMedicalCertificate'
+                  accept='.pdf'
+                    required
+                  />
+              </label>
+              //? ---------------------------------------------------------- */}
+            )  : null}
+            {profession === 'manipulador_Alimentos' ? (
+              //? ----- Diagnóstico sintomático respiratorio y de piel ----- */}
+              <label htmlFor='symptomaticDiagnosis' className='block text-base'>
+                Diagnóstico sintomático respiratorio y de piel en la cual conste la aptitud para la manipulación de alimentos:
+                <input
+                  type='file'
+                  onChange={handleFile}
+                  id='symptomaticDiagnosis'
+                  name='symptomaticDiagnosis'
+                  accept='.pdf'
+                    required
+                  />
+              </label>
+              //? ---------------------------------------------------------- */}
             )  : null}
           {/*//! ------------------------------------------------------------------- */}
           {/*//! --------- Nutrition ----------------------------------------------- */}
             {profession === 'nutricionista' ? (
             //? ----- Nutrition and Dietetics Professional Card --------- */}
-              <label htmlFor='professionalCardNutrition' className='block text-base'>
-                Tarjeta de la Comisión del Ejercicio Profesional de Nutrición y Dietética:
-                <input
-                  type='file'
-                  onChange={handleFile}
-                  id='professionalCardNutrition'
-                  name='professionalCardNutrition'
-                  accept='.pdf'
-                    required
-                  />
-              </label>
+            <label htmlFor='professionalCardNutrition' className='block text-base'>
+              Tarjeta de la Comisión del Ejercicio Profesional de Nutrición y Dietética:
+              <input
+                type='file'
+                onChange={handleFile}
+                id='professionalCardNutrition'
+                name='professionalCardNutrition'
+                accept='.pdf'
+                  required
+                />
+            </label>
             //? --------------------------------------------------------- */}
             )  : null}
           {/*//! ------------------------------------------------------------------- */}
           {/*//! --------- Health work --------------------------------------------- */}
             {profession === 'auxiliar_Enfermeria' ? (
-              <section
-                id='auxiliaryNursingDocuments'
-                className='flex flex-col'
-              >
-              {/*//? ----- Professional Card --------------------------------- */}
-                <label htmlFor='professionalCard' className='block text-base'>
-                  Tarjeta profesional, Vigencia tarjeta profesional y antecedentes profesionales (si aplica):
-                  <input
-                    type='file'
-                    onChange={handleFile}
-                    id='professionalCard'
-                    name='professionalCard'
-                    accept='.pdf'
-                      required
-                    />
-                </label>
-              {/*//? --------------------------------------------------------- */}
-              {/*//? ----- ReTHUS Certificate -------------------------------- */}
-                <label htmlFor='rethusCertificate' className='block text-base'>
-                  Certificado ReTHUS - Registro Único Nacional del Talento Humano en Salud:
-                  <input
-                    type='file'
-                    onChange={handleFile}
-                    id='rethusCertificate'
-                    name='rethusCertificate'
-                    accept='.pdf'
-                      required
-                    />
-                </label>
-              {/*//? --------------------------------------------------------- */}
-              </section>
+              //? ----- Professional Card --------------------------------- */}
+              <label htmlFor='professionalCard' className='block text-base'>
+                Tarjeta profesional, Vigencia tarjeta profesional y antecedentes profesionales:
+                <input
+                  type='file'
+                  onChange={handleFile}
+                  id='professionalCard'
+                  name='professionalCard'
+                  accept='.pdf'
+                    required
+                  />
+              </label>
+              //? --------------------------------------------------------- */}
+            )  : null}
+            {profession === 'auxiliar_Enfermeria' ? (
+              //? ----- ReTHUS Certificate -------------------------------- */}
+              <label htmlFor='rethusCertificate' className='block text-base'>
+                Certificado ReTHUS - Registro Único Nacional del Talento Humano en Salud:
+                <input
+                  type='file'
+                  onChange={handleFile}
+                  id='rethusCertificate'
+                  name='rethusCertificate'
+                  accept='.pdf'
+                    required
+                  />
+              </label>
+              //? --------------------------------------------------------- */}
             )  : null}
           {/*//! ------------------------------------------------------------------- */}
           </section>
@@ -680,7 +674,7 @@ const Form = ({ profession }) => {
               <label htmlFor='delitosSexuales' className='block text-base'>
                 Inhabilidades antecedentes delitos sexuales<a href="https://inhabilidades.policia.gov.co:8080/" target="_blank" rel="noopener noreferrer"><span className='text-xs'> Descargar aquí</span>&#128270;</a>:
               </label>
-              <p className='text-xs w-[270px] ml-[10px] mb-0'> Entidad consultante: <span onClick={(event) => copiar('Fundación Misioneros Divina Redención San Felipe Neri')} className='cursor-pointer text-blue_title underline hover:text-blue_button'>Fundación Misioneros Divina Redención San Felipe Neri </span>&#128221;</p>
+              <p className='text-xs w-[270px] ml-[10px] mb-0'> Entidad consultante: <span onClick={(event) => copiar('Fundación Misioneros Divina Redención')} className='cursor-pointer text-blue_title underline hover:text-blue_button'>Fundación Misioneros Divina Redención </span>&#128221;</p>
               <p className='text-xs w-[270px] ml-[10px] mt-0'> NIT de la Entidad: <span onClick={(event) => copiar('8301431519')} className='cursor-pointer text-blue_title underline hover:text-blue_button'>8301431519</span>&#128221;</p>
               <input
                 type='file'

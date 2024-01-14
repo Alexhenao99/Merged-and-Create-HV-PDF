@@ -130,7 +130,7 @@ const FormWorkHistory = ({ onWorkHistoryChange }) => {
                   required
                 />
               </label>
-              <label>
+              <label className='md:w-[475px]'>
                 Funciones
                 <textarea
                   type='text'
@@ -139,7 +139,7 @@ const FormWorkHistory = ({ onWorkHistoryChange }) => {
                   placeholder='Escribe tu perfil en máximo 300 caracteres'
                   rows='3'
                   cols='30'
-                  className='max-w-sm min-w-0'
+                  className='max-w-max max-h-28 min-h-[168px] md:max-w-5xl md:min-w-[457px] md:max-h-96'
                   value={history.functions}
                   required
                 ></textarea>
@@ -173,7 +173,7 @@ const FormWorkHistory = ({ onWorkHistoryChange }) => {
             onClick={handleAddWorkHistory}
             className='mx-auto'
           >
-            Agregar
+            Agregar Experiencia
           </button>
         )}
       </section>
