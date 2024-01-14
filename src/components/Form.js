@@ -1,7 +1,7 @@
 'use client'
 
 import { professions } from '@/utils/professions'
-import { createPDF, mergePDFS } from '@/utils/functionsPDFS'
+import { copiar, createPDF, mergePDFS, validate } from '@/utils/functionsPDFS'
 import { useEffect, useState } from 'react'
 import FormAcademicBackground from './FormAcademicBackground'
 import FormWorkHistory from './FormWorkHistory'
@@ -82,6 +82,18 @@ const Form = ({ profession }) => {
     personalReferences: []
   })
 
+  const [errors, setErrors] = useState({
+    userName: '',
+    biologicalSex: '',
+    profession: '',
+    profile: '',
+    phone: '',
+    date: '',
+    cc: '',
+    email: '',
+    address: '',
+  })
+
   const handleFile = (e) => {
     const id = e.target.id
     const file = e.target.files[0]
@@ -108,6 +120,10 @@ const Form = ({ profession }) => {
       ...userData,
       [name]: value
     })
+    setErrors(validate({
+      ...userData,
+      [name]: value
+  }));
   }
 
   const handleAcademicHistoryChange = (updatedAcademicHistory) => {
@@ -230,20 +246,26 @@ const Form = ({ profession }) => {
     return null;
   }
 
+  // Verifica si hay errores para habilitar el botón de descarga
+  const errorsValue = Object.values(errors);
+  const isErrorsEmpty = errorsValue.every(value => value === '');
+
+  console.log(errors)
+
   return (
     <section>
       <form
         onSubmit={handleSubmit}
         encType='multipart/form-data'
-        className='flex flex-col'
+        className='flex flex-col text-left mx-auto'
         >
       {/*//!TODO ---------- UserData / AcademicHistory / PersonaReference ----------------- */}
+        <h2> Datos Personales </h2>
         <section
           id='userData'
-          className='flex flex-col'
+          className='flex flex-col md:flex-row md:flex-wrap justify-between mx-auto md:w-3/4'
           >
-          <h2> Datos Personales </h2>
-          <label htmlFor='imgProfile'>
+          <label htmlFor='imgProfile' className='text-lg'>
             Foto de Perfil:
             <input
               type='file'
@@ -254,7 +276,8 @@ const Form = ({ profession }) => {
               required
             />
           </label>
-          <label htmlFor='userName'>
+          <label htmlFor='userName' className={!errors.userName ? '' : 'text-red'}>
+            {errors.userName && <p className='text-red text-xs p-0 m-0'>{errors.userName} </p>}
             Nombres y Apellidos:
             <input
               type='text'
@@ -262,36 +285,10 @@ const Form = ({ profession }) => {
               id='userName'
               name='userName'
               placeholder='Nombres y Apellidos'
+              className={`${!errors.userName? '' : 'border-red focus:border-red valid:border-red'}`}
               required
             />
           </label>
-          <fieldset>
-            <legend>Seleccione su sexo biológico:</legend>
-            <div>
-              <label htmlFor='woman'>
-                <input
-                  type='radio'
-                  onChange={handleData}
-                  id='woman'
-                  name='biologicalSex'
-                  value='woman'
-                />
-                Femenino
-              </label>
-            </div>
-            <div>
-              <label htmlFor='men'>
-                <input
-                  type='radio'
-                  onChange={handleData}
-                  id='men'
-                  name='biologicalSex'
-                  value='men'
-                />
-                Masculino
-              </label>
-            </div>
-          </fieldset>
           <label htmlFor='date'>
             Fecha de nacimiento:
             <input
@@ -303,25 +300,32 @@ const Form = ({ profession }) => {
               required
             />
           </label>
-          <label htmlFor='cc'>
-            Tipo y Número de identificación:
+          <label htmlFor='cc' className={!errors.cc ? '' : 'text-red'}>
+            {errors.cc && <p className='text-red text-xs p-0 m-0'>{errors.cc}</p>}
+            <span className='text-base'>Tipo y Número de identificación:</span>
+            <a href='https://www.marialabaja-bolivar.gov.co/NuestraAlcaldia/Informes/REQUISITOS%20DE%20DOCUMENTOS.pdf' target="_blank" rel="noopener noreferrer" className='text-xs text-blue_title hover:text-blue_button_hover'>Tipos validos: CC, CE, PEP, DNI, SRC, PA &#128270;</a>
             <input
               type='text'
+              value={userData.cc.toUpperCase()}
               onChange={handleData}
               id='cc'
               name='cc'
               placeholder='CC 1234567890'
+              className={`${!errors.cc ? '' : 'border-red focus:border-red valid:border-red'}`}
               required
             />
           </label>
           <label htmlFor='phone'>
+            {errors.phone && <p className='text-red text-xs p-0 m-0'>{errors.phone} </p>}
             Número de celular:
             <input
-              type='number'
+              type='text'
               onChange={handleData}
               id='phone'
               name='phone'
-              placeholder='(316) 212-3456'
+              placeholder='316 212 3456'
+              min="10"
+              max="10"
               required
             />
           </label>
@@ -358,7 +362,34 @@ const Form = ({ profession }) => {
               required
             />
           </label>
-          <label htmlFor='profile'>
+          <fieldset>
+            <legend className='text-sm ml-2'>Seleccione su sexo biológico:</legend>
+            <label htmlFor='woman' className='block w-40'>
+              <input
+                type='radio'
+                onChange={handleData}
+                id='woman'
+                name='biologicalSex'
+                value='woman'
+                className='w-5'
+              />
+              Femenino
+            </label>
+            <label htmlFor='men' className='block w-40'>
+              <input
+                type='radio'
+                onChange={handleData}
+                id='men'
+                name='biologicalSex'
+                value='men'
+                className='w-5'
+              />
+              Masculino
+            </label>
+          </fieldset>
+        </section>
+        <section className='mx-auto'>
+          <label htmlFor='profile' className='md:w-2/3'>
             Perfil Profesional:
             <textarea
               type='text'
@@ -366,286 +397,316 @@ const Form = ({ profession }) => {
               id='profile'
               name='profile'
               placeholder='Escribe tu perfil en máximo 300 caracteres'
-              rows='3'
-              cols='30'
-              className='max-w-sm min-w-0'
+              rows='10'
+              cols='60'
+              className='max-w-max max-h-28 min-h-0 md:max-w-5xl md:min-w-min md:max-h-96'
               required
             ></textarea>
           </label>
-          <section>
-            <FormAcademicBackground onAcademicHistoryChange={handleAcademicHistoryChange} />
-          </section>
-          <section>
-            <FormWorkHistory onWorkHistoryChange={handleWorkHistoryChange} />
-          </section>
-          <section>
-            <FormPersonalReference onPersonalReferenceChange={handlePersonalReferencesChange} />
-          </section>
+        </section>
+        <section>
+          <FormAcademicBackground onAcademicHistoryChange={handleAcademicHistoryChange} />
+        </section>
+        <section>
+          <FormWorkHistory onWorkHistoryChange={handleWorkHistoryChange} />
+        </section>
+        <section>
+          <FormPersonalReference onPersonalReferenceChange={handlePersonalReferencesChange} />
         </section>
       {/*//!TODO -------------------------------------------------------------------------- */}
 
       {/*//!TODO ---------- Documents ----------------------------------------------------- */}
         <section
           id='documents'
-          className='flex flex-col'
+          className='flex justify-center flex-col mx-auto md:w-3/4'
         >
           <h2>Documentación</h2>
-          <p>Todos los documentos deben de ser subidos en formato PDF</p>
-        {/*//? ----- Cédula -------------------------------------------- */}
-          <label htmlFor='identificationScan'>
-            Cédula de Ciudadanía: <span className='text-gray'>Escaneada a color al 150% </span>
-            <input
-              type='file'
-              onChange={handleFile}
-              id='identificationScan'
-              name='identificationScan'
-              accept='.pdf'
-            />
-          </label>
-        {/*//? --------------------------------------------------------- */}
-        {/*//? ----- Military Passbook --------------------------------- */}
-          {userData.biologicalSex === 'men' ? (
-            <label htmlFor='profile'>
-              Libreta Militar:
+          <span className='text-dark text-center mb-6'>Nota: Subir todos los archivos solicitados en formato PDF si tiene una imagen conviértela con <a href="https://www.ilovepdf.com/es/jpg_a_pdf" target="_blank" rel="noopener noreferrer" className='no-underline text-red'>IlovePDF<span className='text-xs'>&#128270;</span></a></span>
+          <section className='flex flex-col md:flex-row md:flex-wrap justify-between mx-auto md:w-3/4'>
+          {/*//? ----- Cédula -------------------------------------------- */}
+            <label htmlFor='identificationScan' className='block text-base'>
+              Cédula de Ciudadanía <span className='text-gray text-sm'>Escaneada a color al 150% </span>:
               <input
                 type='file'
                 onChange={handleFile}
-                id='militaryPassbook'
-                name='militaryPassbook'
+                id='identificationScan'
+                name='identificationScan'
                 accept='.pdf'
+                required
               />
             </label>
-          ) : null}
-        {/*//? --------------------------------------------------------- */}
-        {/*//? ----- RUT ----------------------------------------------- */}
-          <label htmlFor='rut'>
-            Registro Único Tributario RUT, actualizado al presente año:
-            <input
-              type='file'
-              onChange={handleFile}
-              id='rut'
-              name='rut'
-              accept='.pdf'
-            />
-          </label>
-        {/*//? --------------------------------------------------------- */}
-        {/*//? ----- Social Security ----------------------------------- */}
-          <label htmlFor='socialSecurity'>
-          Certificado de afiliación a Seguridad Social (Salud y Pensión):
-            <input
-              type='file'
-              onChange={handleFile}
-              id='socialSecurity'
-              name='socialSecurity'
-              accept='.pdf'
-            />
-          </label>
-        {/*//? --------------------------------------------------------- */}
-        {/*//? ----- Occupational Medical Fitness ---------------------- */}
-          <label htmlFor='occupationalMedical'>
-            Certificado de Aptitud Médica Ocupacional (todos):
-            <input
-              type='file'
-              onChange={handleFile}
-              id='occupationalMedical'
-              name='occupationalMedical'
-              accept='.pdf'
-            />
-          </label>
-        {/*//? --------------------------------------------------------- */}
-        {/*//? ----- Savings Account Certificate ----------------------- */}
-          <label htmlFor='savingsAccount'>
-            Certificado de Cuenta de Ahorros del Banco Davivienda:
-            <input
-              type='file'
-              onChange={handleFile}
-              id='savingsAccount'
-              name='savingsAccount'
-              accept='.pdf'
-            />
-          </label>
-        {/*//? --------------------------------------------------------- */}
-        {/*//! --------- Food handling ------------------------------------------- */}
-          {profession === 'manipulador_Alimentos' ? (
-            <section
-              id='foodHandling'
-              className='flex flex-col'
-            >
-            {/*//? ----- Certificado manipulación de alimentos -------------- */}
-              <label htmlFor='professionalCardFoodHandling'>
-              Certificado manipulación de alimentos:
+          {/*//? --------------------------------------------------------- */}
+          {/*//? ----- Military Passbook --------------------------------- */}
+            {userData.biologicalSex === 'men' ? (
+              <label htmlFor='profile' className='block text-base'>
+                Libreta Militar:
                 <input
                   type='file'
                   onChange={handleFile}
-                  id='professionalCardFoodHandling'
-                  name='professionalCardFoodHandling'
+                  id='militaryPassbook'
+                  name='militaryPassbook'
                   accept='.pdf'
-                  />
+                  required
+                />
               </label>
-            {/*//? ---------------------------------------------------------- */}
-            {/*//? ----- Certificado médico general ------------------------- */}
-              <label htmlFor='generalMedicalCertificate'>
-                Certificado médico general:
-                <input
-                  type='file'
-                  onChange={handleFile}
-                  id='generalMedicalCertificate'
-                  name='generalMedicalCertificate'
-                  accept='.pdf'
-                  />
-              </label>
-            {/*//? ---------------------------------------------------------- */}
-            {/*//? ----- Diagnóstico sintomático respiratorio y de piel ----- */}
-              <label htmlFor='symptomaticDiagnosis'>
-                Diagnóstico sintomático respiratorio y de piel en la cual conste la aptitud para la manipulación de alimentos:
-                <input
-                  type='file'
-                  onChange={handleFile}
-                  id='symptomaticDiagnosis'
-                  name='symptomaticDiagnosis'
-                  accept='.pdf'
-                  />
-              </label>
-            {/*//? ---------------------------------------------------------- */}
-            </section>
-          )  : null}
-        {/*//! ------------------------------------------------------------------- */}
-        {/*//! --------- Nutrition ----------------------------------------------- */}
-          {profession === 'nutricionista' ? (
-          //? ----- Nutrition and Dietetics Professional Card --------- */}
-            <label htmlFor='professionalCardNutrition'>
-              Tarjeta de la Comisión del Ejercicio Profesional de Nutrición y Dietética:
+            ) : null}
+          {/*//? --------------------------------------------------------- */}
+          {/*//? ----- RUT ----------------------------------------------- */}
+            <label htmlFor='rut' className='block text-base'>
+              Registro Único Tributario RUT, actualizado al presente año:
               <input
                 type='file'
                 onChange={handleFile}
-                id='professionalCardNutrition'
-                name='professionalCardNutrition'
+                id='rut'
+                name='rut'
                 accept='.pdf'
-                />
+                required
+              />
             </label>
-          //? --------------------------------------------------------- */}
-          )  : null}
-        {/*//! ------------------------------------------------------------------- */}
-        {/*//! --------- Health work --------------------------------------------- */}
-          {profession === 'auxiliar_Enfermeria' ? (
-            <section
-              id='auxiliaryNursingDocuments'
-              className='flex flex-col'
-            >
-            {/*//? ----- Professional Card --------------------------------- */}
-              <label htmlFor='professionalCard'>
-                Tarjeta profesional, Vigencia tarjeta profesional y antecedentes profesionales (si aplica):
+          {/*//? --------------------------------------------------------- */}
+          {/*//? ----- Social Security ----------------------------------- */}
+            <label htmlFor='socialSecurity' className='block text-base'>
+            Certificado de afiliación a Seguridad Social (Salud y Pensión):
+              <input
+                type='file'
+                onChange={handleFile}
+                id='socialSecurity'
+                name='socialSecurity'
+                accept='.pdf'
+                required
+              />
+            </label>
+          {/*//? --------------------------------------------------------- */}
+          {/*//? ----- Occupational Medical Fitness ---------------------- */}
+            <label htmlFor='occupationalMedical' className='block text-base'>
+              Certificado de Aptitud Médica Ocupacional (todos):
+              <input
+                type='file'
+                onChange={handleFile}
+                id='occupationalMedical'
+                name='occupationalMedical'
+                accept='.pdf'
+                required
+              />
+            </label>
+          {/*//? --------------------------------------------------------- */}
+          {/*//? ----- Savings Account Certificate ----------------------- */}
+            <label htmlFor='savingsAccount' className='block text-base'>
+              Certificado de Cuenta de Ahorros del Banco Davivienda:
+              <input
+                type='file'
+                onChange={handleFile}
+                id='savingsAccount'
+                name='savingsAccount'
+                accept='.pdf'
+                required
+              />
+            </label>
+          {/*//? --------------------------------------------------------- */}
+          {/*//! --------- Food handling ------------------------------------------- */}
+            {profession === 'manipulador_Alimentos' ? (
+              <section
+                id='foodHandling'
+                className='flex flex-col'
+              >
+              {/*//? ----- Certificado manipulación de alimentos -------------- */}
+                <label htmlFor='professionalCardFoodHandling' className='block text-base'>
+                Certificado manipulación de alimentos:
+                  <input
+                    type='file'
+                    onChange={handleFile}
+                    id='professionalCardFoodHandling'
+                    name='professionalCardFoodHandling'
+                    accept='.pdf'
+                      required
+                    />
+                </label>
+              {/*//? ---------------------------------------------------------- */}
+              {/*//? ----- Certificado médico general ------------------------- */}
+                <label htmlFor='generalMedicalCertificate' className='block text-base'>
+                  Certificado médico general:
+                  <input
+                    type='file'
+                    onChange={handleFile}
+                    id='generalMedicalCertificate'
+                    name='generalMedicalCertificate'
+                    accept='.pdf'
+                      required
+                    />
+                </label>
+              {/*//? ---------------------------------------------------------- */}
+              {/*//? ----- Diagnóstico sintomático respiratorio y de piel ----- */}
+                <label htmlFor='symptomaticDiagnosis' className='block text-base'>
+                  Diagnóstico sintomático respiratorio y de piel en la cual conste la aptitud para la manipulación de alimentos:
+                  <input
+                    type='file'
+                    onChange={handleFile}
+                    id='symptomaticDiagnosis'
+                    name='symptomaticDiagnosis'
+                    accept='.pdf'
+                      required
+                    />
+                </label>
+              {/*//? ---------------------------------------------------------- */}
+              </section>
+            )  : null}
+          {/*//! ------------------------------------------------------------------- */}
+          {/*//! --------- Nutrition ----------------------------------------------- */}
+            {profession === 'nutricionista' ? (
+            //? ----- Nutrition and Dietetics Professional Card --------- */}
+              <label htmlFor='professionalCardNutrition' className='block text-base'>
+                Tarjeta de la Comisión del Ejercicio Profesional de Nutrición y Dietética:
                 <input
                   type='file'
                   onChange={handleFile}
-                  id='professionalCard'
-                  name='professionalCard'
+                  id='professionalCardNutrition'
+                  name='professionalCardNutrition'
                   accept='.pdf'
+                    required
                   />
               </label>
-            {/*//? --------------------------------------------------------- */}
-            {/*//? ----- ReTHUS Certificate -------------------------------- */}
-              <label htmlFor='rethusCertificate'>
-                Certificado ReTHUS - Registro Único Nacional del Talento Humano en Salud:
-                <input
-                  type='file'
-                  onChange={handleFile}
-                  id='rethusCertificate'
-                  name='rethusCertificate'
-                  accept='.pdf'
-                  />
-              </label>
-            {/*//? --------------------------------------------------------- */}
-            </section>
-          )  : null}
-        {/*//! ------------------------------------------------------------------- */}
+            //? --------------------------------------------------------- */}
+            )  : null}
+          {/*//! ------------------------------------------------------------------- */}
+          {/*//! --------- Health work --------------------------------------------- */}
+            {profession === 'auxiliar_Enfermeria' ? (
+              <section
+                id='auxiliaryNursingDocuments'
+                className='flex flex-col'
+              >
+              {/*//? ----- Professional Card --------------------------------- */}
+                <label htmlFor='professionalCard' className='block text-base'>
+                  Tarjeta profesional, Vigencia tarjeta profesional y antecedentes profesionales (si aplica):
+                  <input
+                    type='file'
+                    onChange={handleFile}
+                    id='professionalCard'
+                    name='professionalCard'
+                    accept='.pdf'
+                      required
+                    />
+                </label>
+              {/*//? --------------------------------------------------------- */}
+              {/*//? ----- ReTHUS Certificate -------------------------------- */}
+                <label htmlFor='rethusCertificate' className='block text-base'>
+                  Certificado ReTHUS - Registro Único Nacional del Talento Humano en Salud:
+                  <input
+                    type='file'
+                    onChange={handleFile}
+                    id='rethusCertificate'
+                    name='rethusCertificate'
+                    accept='.pdf'
+                      required
+                    />
+                </label>
+              {/*//? --------------------------------------------------------- */}
+              </section>
+            )  : null}
+          {/*//! ------------------------------------------------------------------- */}
+          </section>
         {/*//? ----- Criminal and disciplinary record certificates ----- */}
+          <h4 className='text-center'>Certificados de antecedentes penales y disciplinarios</h4>
           <section
             id='disciplinaryRecords'
-            className='flex flex-col'
+            className='flex flex-col md:flex-row md:flex-wrap justify-between mx-auto md:w-3/4'
           >
-            <h4>Certificados de antecedentes penales y disciplinarios</h4>
           {/*//* ----- Procuraduría ---------------- */}
-            <label htmlFor='procuraduria'>
-            Procuraduría:
+            <label htmlFor='procuraduria' className='block text-base'>
+            Procuraduría<a href="https://www.procuraduria.gov.co/Pages/Generacion-de-antecedentes.aspx" target="_blank" rel="noopener noreferrer"><span className='text-xs'> Descargar aquí</span>&#128270;</a>:
             <input
               type='file'
               onChange={handleFile}
               id='procuraduria'
               name='procuraduria'
               accept='.pdf'
+              required
             />
             </label>
           {/*//* ----------------------------------- */}
           {/*//* ----- Contraloría ----------------- */}
-            <label htmlFor='contraloria'>
-            Contraloría:
+            <label htmlFor='contraloria' className='block text-base'>
+            Contraloría<a href="https://www.contraloria.gov.co/web/guest/persona-natural" target="_blank" rel="noopener noreferrer"><span className='text-xs'> Descargar aquí</span>&#128270;</a>:
             <input
               type='file'
               onChange={handleFile}
               id='contraloria'
               name='contraloria'
               accept='.pdf'
+              required
             />
             </label>
           {/*//* ----------------------------------- */}
           {/*//* ----- Personería ------------------ */}
-            <label htmlFor='personeria'>
-            Personería:
+            <label htmlFor='personeria' className='block text-base'>
+            Personería<a href="https://antecedentes.personeriabogota.gov.co/expedicion-antecedentes" target="_blank" rel="noopener noreferrer"><span className='text-xs'> Descargar aquí</span>&#128270;</a>:
             <input
               type='file'
               onChange={handleFile}
               id='personeria'
               name='personeria'
               accept='.pdf'
+              required
             />
             </label>
           {/*//* ----------------------------------- */}
           {/*//* ----- Antecedentes Judiciales ----- */}
-            <label htmlFor='antecedentesJud'>
-            Antecedentes Judiciales:
+            <label htmlFor='antecedentesJud' className='block text-base'>
+            Antecedentes Jud.<a href="https://antecedentes.policia.gov.co:7005/WebJudicial/" target="_blank" rel="noopener noreferrer"><span className='text-xs'> Descargar aquí</span>&#128270;</a>:
             <input
               type='file'
               onChange={handleFile}
               id='antecedentesJud'
               name='antecedentesJud'
               accept='.pdf'
+              required
             />
             </label>
           {/*//* ----------------------------------- */}
           {/*//* ----- Sistema Nacional de Medidas Correctivas ------------ */}
-            <label htmlFor='SNMC'>
-            Sistema Nacional de Medidas Correctivas:
+            <label htmlFor='SNMC' className='block text-base'>
+            Sistema Nacional de Medidas Correctivas<a href="https://srvcnpc.policia.gov.co/PSC/frm_cnp_consulta.aspx" target="_blank" rel="noopener noreferrer"><span className='text-xs'> Descargar aquí</span>&#128270;</a>:
             <input
               type='file'
               onChange={handleFile}
               id='SNMC'
               name='SNMC'
               accept='.pdf'
+              required
             />
             </label>
           {/*//* ----------------------------------- */}
           {/*//* ----- Delitos sexuales ------------ */}
-            <label htmlFor='delitosSexuales'>
-              Inhabilidades antecedentes delitos sexuales:
+            <section>
+              <label htmlFor='delitosSexuales' className='block text-base'>
+                Inhabilidades antecedentes delitos sexuales<a href="https://inhabilidades.policia.gov.co:8080/" target="_blank" rel="noopener noreferrer"><span className='text-xs'> Descargar aquí</span>&#128270;</a>:
+              </label>
+              <p className='text-xs w-[270px] ml-[10px] mb-0'> Entidad consultante: <span onClick={(event) => copiar('Fundación Misioneros Divina Redención San Felipe Neri')} className='cursor-pointer text-blue_title underline hover:text-blue_button'>Fundación Misioneros Divina Redención San Felipe Neri </span>&#128221;</p>
+              <p className='text-xs w-[270px] ml-[10px] mt-0'> NIT de la Entidad: <span onClick={(event) => copiar('8301431519')} className='cursor-pointer text-blue_title underline hover:text-blue_button'>8301431519</span>&#128221;</p>
               <input
                 type='file'
                 onChange={handleFile}
                 id='delitosSexuales'
                 name='delitosSexuales'
+                className='ml-[10px]'
                 accept='.pdf'
+                required
               />
-            </label>
+            </section>
           {/*//* ----------------------------------- */}
           </section>
         {/*//? --------------------------------------------------------- */}
         </section>
       {/*//!TODO -------------------------------------------------------------------------- */}
-
-        <input
-          type='submit'
-          value='Descargar CV'
-        />
+      <section className='mx-auto'>
+        {isErrorsEmpty ?
+          <input
+            type='submit'
+            value='Descargar CV'
+            className='rounded-md py-3 px-7 mt-4 bg-blue_button hover:bg-blue_button_hover border-none text-xl'
+          />
+          : <h2 className='text-red'>Revisa los datos, podría haber algún error.</h2>
+        }
+      </section>
       </form>
       <div
         id='pdfViewer'

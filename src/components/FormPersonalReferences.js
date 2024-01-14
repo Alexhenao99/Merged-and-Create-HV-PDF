@@ -26,13 +26,14 @@ const FormPersonalReference = ({ onPersonalReferenceChange }) => {
   return (
     <div>
       <h2>Referencias Personales</h2>
-      <section className='my-10'>
+      <section className='flex flex-col text-left mx-auto'>
         {personalReference.map((reference, index) => (
           <div
             key={index}
-            className='flex flex-col mb-5'
+            className='mx-auto md:w-3/4'
           >
-            <section>
+            <h4 className='text-center'>Referencia 1</h4>
+            <section className='flex flex-col md:flex-row md:flex-wrap justify-between mx-auto md:w-3/4'>
               <label>
                 Nombre
                 <input
@@ -67,7 +68,8 @@ const FormPersonalReference = ({ onPersonalReferenceChange }) => {
                 />
               </label>
             </section>
-            <section>
+            <h4 className='text-center'>Referencia 2</h4>
+            <section className='flex flex-col md:flex-row md:flex-wrap justify-between mx-auto md:w-3/4'>
               <label>
                 Nombre
                 <input

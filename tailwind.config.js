@@ -13,7 +13,8 @@ module.exports = {
       blue_title: '#005791',
       blue_button: '#4175FC',
       blue_button_hover: '#084af3',
-      red: '#E5322D'
+      red: '#E5322D',
+      red_hover: '#8B0000'
     }
   },
   plugins: [],

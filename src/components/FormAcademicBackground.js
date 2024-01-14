@@ -41,60 +41,66 @@ const FormAcademicBackground = ({ onAcademicHistoryChange }) => {
   return (
     <div>
       <h2>Formación Académica</h2>
-      <section className='my-10'>
+      <section className='flex flex-col text-left mx-auto'>
         {academicHistory.map((history, index) => (
           <div
             key={index}
-            className='flex flex-col mb-5'
+            className='mx-auto md:w-3/4'
           >
-            <label>
-              Fecha de Graduación
-              <input
-                type='date'
-                name='finishDate'
-                value={history.finishDate}
-                onChange={(e) => handleAcademicHistoryData(index, e)}
-                required
-              />
-            </label>
-            <label>
-              Titulo
-              <input
-                type='text'
-                name='title'
-                placeholder='Titulo'
-                value={history.title}
-                onChange={(e) => handleAcademicHistoryData(index, e)}
-                required
-              />
-            </label>
-            <label>
-              Nombre de la Institución
-              <input
-                type='text'
-                name='institution'
-                placeholder='Nombre de la institución'
-                value={history.institution}
-                onChange={(e) => handleAcademicHistoryData(index, e)}
-                required
-              />
-            </label>
-            <label>
-              Certificado o acta de la institución
-              <input
-                type='file'
-                onChange={(e) => handleAcademicHistoryFile(index, e)}
-                accept='.pdf'
-                required
-              />
-            </label>
+            <section className='flex flex-col md:flex-row md:flex-wrap justify-between mx-auto md:w-3/4'>
+
+              <label>
+                Fecha de Graduación
+                <input
+                  type='date'
+                  name='finishDate'
+                  value={history.finishDate}
+                  onChange={(e) => handleAcademicHistoryData(index, e)}
+                  required
+                />
+              </label>
+              <label>
+                Titulo
+                <input
+                  type='text'
+                  name='title'
+                  placeholder='Titulo'
+                  value={history.title}
+                  onChange={(e) => handleAcademicHistoryData(index, e)}
+                  required
+                />
+              </label>
+              <label>
+                Nombre de la Institución
+                <input
+                  type='text'
+                  name='institution'
+                  placeholder='Nombre de la institución'
+                  value={history.institution}
+                  onChange={(e) => handleAcademicHistoryData(index, e)}
+                  required
+                />
+              </label>
+              <label className='text-sm'>
+                Certificado o acta de Graduación
+                <input
+                  type='file'
+                  onChange={(e) => handleAcademicHistoryFile(index, e)}
+                  accept='.pdf'
+                  required
+                />
+              </label>
+            </section>
             {academicHistory.length > 1 && (
-              <button
-                type='button'
-                onClick={() => handleRemoveAcademicHistory(index)}
-              >
-                Eliminar
-              </button>
+              <section className='flex justify-center mb-5 w-auto'>
+                <button
+                  type='button'
+                  onClick={() => handleRemoveAcademicHistory(index)}
+                  className='w-16 h-8 p-1 border-red_hover text-red_hover hover:border-red hover:text-red'
+                >
+                  Eliminar
+                </button>
+              </section>
             )}
           </div>
         ))}
@@ -102,6 +108,7 @@ const FormAcademicBackground = ({ onAcademicHistoryChange }) => {
           <button
             type='button'
             onClick={handleAddAcademicHistory}
+            className='mx-auto'
           >
             Agregar
           </button>

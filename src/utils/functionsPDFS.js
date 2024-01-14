@@ -98,4 +98,42 @@ const mostrarPDF = async () => {
   pdfViewer.src = pdfDataUri
 }
 
-export { createPDF, imageToPDF, mergePDFS, mostrarPDF }
+function copiar(text) {
+  // Intenta enfocar el documento antes de copiar al portapapeles
+  document.querySelector('body').focus()
+
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      alert('¡Copiado con éxito!')
+    })
+    .catch((err) => {
+      console.error('Error al copiar al portapapeles: ', err)
+    })
+}
+
+const validate = (validar) => {
+  let errors = {};
+
+  if ('userName' in validar) {
+    if (validar.userName === '') errors.userName = 'Este Campo Es Obligatorio *';
+    else if (!/^[ a-zA-ZÀ-ÿ\u00f1\u00d1]*$/g.test(validar.userName)) errors.userName = 'El nombre o el apellido es inválido.';
+    else if (!/^\S{3,}(?:\s\S{3,})+$/.test(validar.userName)) errors.userName = 'Debe escribir su Nombre Completo';
+  }
+
+  if ('cc' in validar) {
+    if (validar.cc === '') errors.cc = 'Este Campo Es Obligatorio *';
+    else if (!/^(CC|TI)/.test(validar.cc)) errors.cc = 'El tipo de documento es inválido.';
+    else if (!/^(CC|TI)\s\d{10,12}$/.test(validar.cc)) errors.cc = 'El numero de documento es inválido.';
+  }
+
+  if ('phone' in validar) {
+    if (validar.phone === '') errors.phone = 'Este Campo es obligatorio';
+    else if (!/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im.test(validar.phone)) errors.phone = 'El número de celular es inválido.'
+  }
+
+  return errors;
+};
+
+
+export { createPDF, imageToPDF, mergePDFS, mostrarPDF, copiar, validate }

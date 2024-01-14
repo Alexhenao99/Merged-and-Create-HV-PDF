@@ -11,7 +11,7 @@ const FormPage = ({ params }) => {
         <Image src={logoFumdir} alt="Logo Fumdir" className='w-60 h-32 md:w-80 md:h-44' />
         <h2 className='text-blue_title text-lg md:text-2xl'>Fundación Misioneros Divina Redención San Felipe Neri</h2>
       </a>
-      <span className='text-dark'>Nota: Subir todos los archivos solicitados en formato PDF si tiene una imagen conviértala con <a href="https://www.ilovepdf.com/es/jpg_a_pdf" target="_blank" rel="noopener noreferrer" className='no-underline text-red'>IlovePDF</a></span>
+      <span className='text-dark'>Nota: Subir todos los archivos solicitados en formato PDF si tiene una imagen conviértela con <a href="https://www.ilovepdf.com/es/jpg_a_pdf" target="_blank" rel="noopener noreferrer" className='no-underline text-red'>IlovePDF<span className='text-xs'>&#128270;</span></a></span>
       <Form profession={profession} />
     </main>
   )
