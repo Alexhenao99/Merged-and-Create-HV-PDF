@@ -1,13 +1,14 @@
 'use client'
 
 import { professions } from '@/utils/professions'
-import { copiar, createPDF, mergePDFS, validate } from '@/utils/functionsPDFS'
+import { copiar, createPDF, mergePDFS } from '@/utils/functionsPDFS'
 import { useEffect, useState } from 'react'
 import FormAcademicBackground from './FormAcademicBackground'
 import FormWorkHistory from './FormWorkHistory'
 import { orderData, orderPDFs } from '@/utils/orderPDFs'
 import FormPersonalReference from './FormPersonalReferences'
 import { useRouter } from 'next/navigation'
+import { validateData, validatePersonalReference } from '@/utils/validateErrors'
 
 const Form = ({ profession }) => {
 
@@ -90,6 +91,14 @@ const Form = ({ profession }) => {
     cc: '',
     email: '',
     address: '',
+
+    //* Personal Reference
+    name: '',
+    profession: '',
+    contact: '',
+    name2: '',
+    profession2: '',
+    contact2: ''
   })
 
   const handleFile = (e) => {
@@ -114,14 +123,17 @@ const Form = ({ profession }) => {
 
   const handleData = (e) => {
     const { name, value } = e.target
+
     setUserData({
       ...userData,
       [name]: value
     })
-    setErrors(validate({
-      ...userData,
+
+    const validationsErrors = validateData({
       [name]: value
-  }));
+    })
+
+    setErrors({...errors, ...validationsErrors});
   }
 
   const handleAcademicHistoryChange = (updatedAcademicHistory) => {
@@ -138,11 +150,13 @@ const Form = ({ profession }) => {
     })
   }
 
-  const handlePersonalReferencesChange = (updatedPersonalReferences) => {
+  const handlePersonalReferencesChange = (updatedPersonalReferences, validationsErrors) => {
     setUserData({
       ...userData,
       personalReferences: updatedPersonalReferences
     })
+
+    setErrors({...errors, ...validationsErrors});
   }
 
   const handleSubmit = async (e) => {
@@ -192,7 +206,6 @@ const Form = ({ profession }) => {
 
     // Une los pdf con el orden establecido en fileObject
     const pdfMerged = await mergePDFS(pdfCreateBytes, orderedFilesObject)
-    setPdfMerged(pdfMerged)
 
     const downloadLink = URL.createObjectURL(pdfMerged);
     const a = document.createElement('a');
@@ -248,8 +261,6 @@ const Form = ({ profession }) => {
   const errorsValue = Object.values(errors);
   const isErrorsEmpty = errorsValue.every(value => value === '');
 
-  console.log(errors)
-
   return (
     <section>
       <form
@@ -283,18 +294,19 @@ const Form = ({ profession }) => {
               id='userName'
               name='userName'
               placeholder='Nombres y Apellidos'
-              className={`${!errors.userName? '' : 'border-red focus:border-red valid:border-red'}`}
+              className={`${!errors.userName? '' : 'border-red focus:border-red valid:border-red text-red'}`}
               required
             />
           </label>
-          <label htmlFor='date'>
+          <label htmlFor='date' className={!errors.date ? '' : 'text-red'}>
+            {errors.date && <p className='text-red text-xs p-0 m-0'>{errors.date}</p>}
             Fecha de nacimiento:
             <input
               type='date'
               onChange={handleData}
               id='date'
               name='date'
-              placeholder='25'
+              className={`${!errors.date ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
               required
             />
           </label>
@@ -309,25 +321,27 @@ const Form = ({ profession }) => {
               id='cc'
               name='cc'
               placeholder='CC 1234567890'
-              className={`${!errors.cc ? '' : 'border-red focus:border-red valid:border-red'}`}
+              className={`${!errors.cc ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
               required
             />
           </label>
-          <label htmlFor='phone'>
+          <label htmlFor='phone' className={!errors.phone ? '' : 'text-red'}>
             {errors.phone && <p className='text-red text-xs p-0 m-0'>{errors.phone} </p>}
             Número de celular:
             <input
               type='text'
+              value={userData.phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3')}
               onChange={handleData}
               id='phone'
               name='phone'
-              placeholder='316 212 3456'
-              min="10"
-              max="10"
+              placeholder='312 123 4567'
+              maxLength={12}
+              className={`${!errors.phone ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
               required
             />
           </label>
-          <label htmlFor='email'>
+          <label htmlFor='email' className={!errors.email ? '' : 'text-red'}>
+            {errors.email && <p className='text-red text-xs p-0 m-0'>{errors.email} </p>}
             Correo Personal:
             <input
               type='email'
@@ -335,10 +349,12 @@ const Form = ({ profession }) => {
               id='email'
               name='email'
               placeholder='Ejemplo@gmail.com'
+              className={`${!errors.email ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
               required
             />
           </label>
-          <label htmlFor='address'>
+          <label htmlFor='address' className={!errors.address ? '' : 'text-red'}>
+            {errors.address && <p className='text-red text-xs p-0 m-0'>{errors.address} </p>}
             Dirección:
             <input
               type='text'
@@ -346,10 +362,12 @@ const Form = ({ profession }) => {
               id='address'
               name='address'
               placeholder='Kr. 90 # 149 - 73'
+              className={`${!errors.address ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
               required
             />
           </label>
-          <label htmlFor='profession'>
+          <label htmlFor='profession' className={!errors.profession ? '' : 'text-red'}>
+            {errors.profession && <p className='text-red text-xs p-0 m-0'>{errors.profession} </p>}
             Profesión:
             <input
               type='text'
@@ -357,6 +375,7 @@ const Form = ({ profession }) => {
               id='profession'
               name='profession'
               placeholder='Técnico Operativo'
+              className={`${!errors.profession ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
               required
             />
           </label>
@@ -381,23 +400,26 @@ const Form = ({ profession }) => {
                 name='biologicalSex'
                 value='men'
                 className='w-[13px] mr-4'
+                required
               />
               Masculino
             </label>
           </fieldset>
         </section>
         <section className='mx-auto'>
-          <label htmlFor='profile' className='md:w-2/3'>
+          <label htmlFor='profile' className={!errors.profile ? 'md:w-2/3' : 'text-red md:w-2/3'}>
+          {errors.profile && <p className='text-red text-xs p-0 m-0'>{errors.profile} </p>}
             Perfil Profesional:
             <textarea
               type='text'
               onChange={handleData}
               id='profile'
               name='profile'
-              placeholder='Escribe tu perfil en máximo 300 caracteres'
+              placeholder='Escribe tu perfil en máximo 800 caracteres mínimo 500.'
               rows='10'
               cols='60'
-              className='max-w-max max-h-28 min-h-0 md:max-w-5xl md:min-w-min md:max-h-96'
+              className={`${!errors.profile ? 'max-w-max max-h-28 min-h-0 md:max-w-5xl md:min-w-min md:max-h-96' : 'border-red focus:border-red valid:border-red text-red max-w-max max-h-28 min-h-0 md:max-w-5xl md:min-w-min md:max-h-96'}`}
+              maxLength={800}
               required
             ></textarea>
           </label>
