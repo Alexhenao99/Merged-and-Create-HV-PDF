@@ -1,3 +1,4 @@
+import { validateAcademicHistoryData } from '@/utils/validateErrors'
 import React, { useState } from 'react'
 
 const FormAcademicBackground = ({ onAcademicHistoryChange }) => {
@@ -10,13 +11,25 @@ const FormAcademicBackground = ({ onAcademicHistoryChange }) => {
     }
   ])
 
+  const [errors, setErrors] = useState({
+    finishDate: '',
+    title: '',
+    institution: ''
+  })
+
   const handleAcademicHistoryData = (index, e) => {
     const { name, value } = e.target
     const updatedAcademicHistory = [...academicHistory]
 
     updatedAcademicHistory[index][name] = value
     setAcademicHistory(updatedAcademicHistory)
-    onAcademicHistoryChange(updatedAcademicHistory)
+
+    const validationsErrors = validateAcademicHistoryData({
+      [name]: value
+    })
+    setErrors({ ...errors, ...validationsErrors })
+
+    onAcademicHistoryChange(updatedAcademicHistory, validationsErrors)
   }
 
   const handleAcademicHistoryFile = (index, e) => {
@@ -48,7 +61,6 @@ const FormAcademicBackground = ({ onAcademicHistoryChange }) => {
             className='mx-auto md:w-3/4'
           >
             <section className='flex flex-col md:flex-row md:flex-wrap justify-between mx-auto md:w-3/4'>
-
               <label>
                 Fecha de Graduación
                 <input
@@ -59,7 +71,8 @@ const FormAcademicBackground = ({ onAcademicHistoryChange }) => {
                   required
                 />
               </label>
-              <label>
+              <label className={!errors.title ? '' : 'text-red'}>
+                {errors.title && <p className='text-red text-xs p-0 m-0'>{errors.title} </p>}
                 Titulo
                 <input
                   type='text'
@@ -67,10 +80,12 @@ const FormAcademicBackground = ({ onAcademicHistoryChange }) => {
                   placeholder='Titulo'
                   value={history.title}
                   onChange={(e) => handleAcademicHistoryData(index, e)}
+                  className={`${!errors.title ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
                   required
                 />
               </label>
-              <label>
+              <label className={!errors.institution ? '' : 'text-red'}>
+                {errors.institution && <p className='text-red text-xs p-0 m-0'>{errors.institution} </p>}
                 Nombre de la Institución
                 <input
                   type='text'
@@ -78,6 +93,7 @@ const FormAcademicBackground = ({ onAcademicHistoryChange }) => {
                   placeholder='Nombre de la institución'
                   value={history.institution}
                   onChange={(e) => handleAcademicHistoryData(index, e)}
+                  className={`${!errors.institution ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
                   required
                 />
               </label>

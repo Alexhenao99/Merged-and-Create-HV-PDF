@@ -98,7 +98,21 @@ const Form = ({ profession }) => {
     contact: '',
     name2: '',
     profession2: '',
-    contact2: ''
+    contact2: '',
+
+    //* Academic Info
+    finishDate: '',
+    title: '',
+    institution: '',
+
+    //* Work information
+    company: '',
+    workstation: '',
+    startDate: '',
+    finishDate: '',
+    directSupervisor: '',
+    contactSupervisor: '',
+    functions: '',
   })
 
   const handleFile = (e) => {
@@ -136,18 +150,22 @@ const Form = ({ profession }) => {
     setErrors({...errors, ...validationsErrors});
   }
 
-  const handleAcademicHistoryChange = (updatedAcademicHistory) => {
+  const handleAcademicHistoryChange = (updatedAcademicHistory, validationsErrors) => {
     setUserData({
       ...userData,
       academicHistory: updatedAcademicHistory
     })
+
+    setErrors({...errors, ...validationsErrors});
   }
 
-  const handleWorkHistoryChange = (updatedWorkHistory) => {
+  const handleWorkHistoryChange = (updatedWorkHistory, validationsErrors) => {
     setUserData({
       ...userData,
       workHistory: updatedWorkHistory
     })
+
+    setErrors({...errors, ...validationsErrors});
   }
 
   const handlePersonalReferencesChange = (updatedPersonalReferences, validationsErrors) => {
