@@ -20,8 +20,6 @@ const createPDF = async (userData, { imgProfile }) => {
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
   const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
 
-  console.log(userData)
-
   // Icons
   const iconContact = await fetchIcons(iconContactPng.src, pdfDoc)
   const iconDate = await fetchIcons(iconDatePng.src, pdfDoc)
