@@ -35,16 +35,16 @@ const Finish = () => {
         El archivo PDF se ha descargado en su dispositivo con el nombre <span className='text-blue_button'> CV de {userData?.name} - {userData?.profession}.pdf </span>.
       </p>
       <p>
-        Por favor, envié el archivo al siguiente correo haciendo clic en el enlace: <a className='text-blue_button hover:text-blue_button_hover underline' href={`mailto:waha0522@gmail.com?subject=HV de ${userData?.name} - ${userData?.profession}`}>alexanderhenao0522@gmail.com</a>
+        Por favor, envié el archivo al siguiente correo haciendo clic en el enlace: <a className='text-blue_button hover:text-blue_button_hover underline' href={`mailto:waha0522@gmail.com?subject=${userData?.name} - ${userData?.profession}`}>alexanderhenao0522@gmail.com &#128270;</a>
       </p>
       <a href="https://classroom.google.com/c/NTQxOTc0NTkwNjE1?hl=es&cjc=6osma4d" target="_blank" rel="noopener noreferrer" className='flex flex-col items-center text-center'>
         <p className='text-dark p-0 m-0'>
           Recuerde realizar el curso de Inducción o Reinducción
         </p>
-        <Image src={classroom} alt="Logo Fumdir" className='m-0 p-0 w-60 h-32 md:w-80 md:h-56' />
+        <Image src={classroom} alt="Logo Fumdir" className='m-0 py-6 w-40 h-28 md:w-60 md:h-40' />
       </a>
 
-      <Link href={`/`} className='text-blue_button_hover underline p-6'>Diligencar nuevamente el formulario</Link>
+      <Link href={`/`} className='text-dark hover:text-white rounded-md py-3 px-7 mt-4 bg-blue_button hover:bg-blue_button_hover border-none md:py-4 md:px-7 md:mt-8 md:text-xl'>Diligencar nuevamente el formulario</Link>
     </main>
   )
 }
