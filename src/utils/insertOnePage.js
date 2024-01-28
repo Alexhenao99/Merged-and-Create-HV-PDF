@@ -13,7 +13,7 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
   // Formatos
   let yLeft = yStartLeft
   let yRight = yStartRight
-  const maxWidth = 300
+  const maxWidth = 340
   const fontTitleSize = 25
   const fontSubtitlesSize = 14
   const fontTextSize = 12
@@ -160,8 +160,9 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
       x: 14,
       y: yLeft,
       maxWidth: 190,
+      lineHeight: lineHeight,
       font: fontBold,
-      size: fontSubtitlesSize,
+      size: academic.title.length > 22 ? fontDate : fontSubtitlesSize,
       color: rgb(0, 0, 0)
     })// 60 caracteres
     yLeft -= academic.title.length > 30 ? lineHeight * 2 : lineHeight
@@ -176,8 +177,6 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
     })// 60 caracteres
     yLeft -= academic.institution.length > 30 ? lineHeight * 3 : lineHeight * 2
   })
-
-  console.log(yLeft)
 
   //* ---------------------------------------------- Right ---------------------------------------------- *\\
 
@@ -221,7 +220,7 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
     font: font,
     size: fontTextSize,
     color: rgb(0, 0, 0)
-  }) // máximo 500 caracteres
+  })
   const profileHeight = estimateTextHeight(userData.profile, font, fontTextSize, maxWidth, lineHeight)
   yRight -= profileHeight + division
 
@@ -260,7 +259,7 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
       font: font,
       size: fontSubtitlesSize,
       color: rgb(0, 0, 0)
-    })// 60 caracteres
+    })
     yRight -= lineHeight
     page.drawText(`${work.startDate} - ${work.finishDate}`, {
       x: 230,
@@ -270,7 +269,7 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
       font: font,
       size: fontDate,
       color: rgb(0, 0, 0)
-    })// 60 caracteres
+    })
     yRight -= lineHeight
     page.drawText(work.directSupervisor, {
       x: 230,
@@ -300,7 +299,7 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
       color: rgb(0, 0, 0)
     })
     const functionHeight = estimateTextHeight(work.functions, font, fontTextSize, maxWidth, lineHeight)
-    yRight -= functionHeight
+    yRight -= functionHeight + division
   })
 
   //? Text Referencias //
@@ -367,7 +366,7 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
 }
 
 export const estimateTextHeight = (text, font, size, maxWidth, lineHeight) => {
-  const words = text.split(' ')
+  const words = text.split(/\s+/) // Dividir por espacios en blanco y saltos de línea
   let lines = []
   let currentLine = words[0]
 
