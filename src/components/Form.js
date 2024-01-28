@@ -8,13 +8,14 @@ import FormWorkHistory from './FormWorkHistory'
 import { orderData, orderPDFs } from '@/utils/orderPDFs'
 import FormPersonalReference from './FormPersonalReferences'
 import { useRouter } from 'next/navigation'
-import { validateData, validatePersonalReference } from '@/utils/validateErrors'
+import { validateData } from '@/utils/validateErrors'
 
 const Form = ({ profession }) => {
 
   const router = useRouter()
   const professionData = professions
 
+  // const [pdfMerged, setPdfMerged] = useState()
   const [fileReferences, setFileReferences] = useState({
     identificationScan: null,
     militaryPassbook: null,
@@ -224,6 +225,7 @@ const Form = ({ profession }) => {
 
     // Une los pdf con el orden establecido en fileObject
     const pdfMerged = await mergePDFS(pdfCreateBytes, orderedFilesObject)
+    // setPdfMerged(pdfMerged)
 
     const downloadLink = URL.createObjectURL(pdfMerged);
     const a = document.createElement('a');
@@ -511,7 +513,6 @@ const Form = ({ profession }) => {
                 id='socialSecurity'
                 name='socialSecurity'
                 accept='.pdf'
-                required
               />
             </label>
           {/*//? --------------------------------------------------------- */}
@@ -537,7 +538,6 @@ const Form = ({ profession }) => {
                 id='savingsAccount'
                 name='savingsAccount'
                 accept='.pdf'
-                required
               />
             </label>
           {/*//? --------------------------------------------------------- */}
