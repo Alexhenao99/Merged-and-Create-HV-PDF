@@ -37,6 +37,12 @@ const Form = ({ profession }) => {
     professionalCardNutrition: null,
   })
 
+//? -----------------------Documentation --------------------
+
+  const rethus = ['enfermero_jefe' ,'fisioterapeuta' ,'fonoaudiologo' ,'nutricionista' ,'psicologo' ,'auxiliar_enfermeria' ,'terapeuta' ,'gerontologo' ,'regente']
+  const certificacionManipulacionA = ['nutricionista', 'tecnologo_alimentos', 'manipulador', 'tecnico_gastronomia', 'auxiliar_servicios']
+
+//? ---------------------------------------------------------
   const desiredOrder = [
     'identificationScan',
     'militaryPassbook',
@@ -45,6 +51,7 @@ const Form = ({ profession }) => {
     'academic3',
     'academic4',
     'professionalCard',
+    'professionalCardNutrition',
     'rethusCertificate',
     'work1',
     'work2',
@@ -59,10 +66,7 @@ const Form = ({ profession }) => {
     'socialSecurity',
     'occupationalMedical',
     'professionalCardFoodHandling',
-    'generalMedicalCertificate',
-    'symptomaticDiagnosis',
     'savingsAccount',
-    'professionalCardNutrition',
   ];
 
   const [imgProfile, setImgProfile] = useState({ imgProfile: null })
@@ -461,7 +465,9 @@ const Form = ({ profession }) => {
           className='flex justify-center flex-col mx-auto md:w-3/4'
         >
           <h2>Documentación</h2>
-          <span className='text-dark text-center mb-6'>Nota: Subir todos los archivos solicitados en formato PDF si tiene una imagen conviértela con <a href="https://www.ilovepdf.com/es/jpg_a_pdf" target="_blank" rel="noopener noreferrer" className='no-underline text-red'>IlovePDF<span className='text-xs'>&#128270;</span></a></span>
+          <span className='text-dark text-center'>Nota: Subir todos los archivos solicitados en formato PDF si tiene una imagen conviértela con <a href="https://www.ilovepdf.com/es/jpg_a_pdf" target="_blank" rel="noopener noreferrer" className='no-underline text-red'>Convertir en IlovePDF<span className='text-xs'>&#128270;</span></a></span>
+          <span className='text-dark text-center mb-6'>Si necesita unir documentos PDF puede hacerlo aquí <a href="https://www.ilovepdf.com/es/unir_pdf" target="_blank" rel="noopener noreferrer" className='no-underline text-red'>Unir en IlovePDF<span className='text-xs'>&#128270;</span></a></span>
+
           <section className='flex flex-col md:flex-row md:flex-wrap justify-between mx-auto md:w-3/4'>
           {/*//? ----- Cédula -------------------------------------------- */}
             <label htmlFor='identificationScan' className='block text-base'>
@@ -542,51 +548,21 @@ const Form = ({ profession }) => {
             </label>
           {/*//? --------------------------------------------------------- */}
           {/*//! --------- Food handling ------------------------------------------- */}
-            {profession === 'manipulador_Alimentos' ? (
+            {certificacionManipulacionA.includes(profession) && (
               //? ----- Certificado manipulación de alimentos -------------- */}
               <label htmlFor='professionalCardFoodHandling' className='block text-base'>
-              Certificado manipulación de alimentos:
+              Carnet Manipulación de Alimentos y exámenes de laboratorio aptos para manipular alimentos:
                 <input
                   type='file'
                   onChange={handleFile}
                   id='professionalCardFoodHandling'
                   name='professionalCardFoodHandling'
                   accept='.pdf'
-                    required
+                  required = {profession !== 'auxiliar_servicios' && true}
                   />
               </label>
               //? ---------------------------------------------------------- */}
-            )  : null}
-            {profession === 'manipulador_Alimentos' ? (
-              //? ----- Certificado médico general ------------------------- */}
-              <label htmlFor='generalMedicalCertificate' className='block text-base'>
-                Certificado médico general:
-                <input
-                  type='file'
-                  onChange={handleFile}
-                  id='generalMedicalCertificate'
-                  name='generalMedicalCertificate'
-                  accept='.pdf'
-                    required
-                  />
-              </label>
-              //? ---------------------------------------------------------- */}
-            )  : null}
-            {profession === 'manipulador_Alimentos' ? (
-              //? ----- Diagnóstico sintomático respiratorio y de piel ----- */}
-              <label htmlFor='symptomaticDiagnosis' className='block text-base'>
-                Diagnóstico sintomático respiratorio y de piel en la cual conste la aptitud para la manipulación de alimentos:
-                <input
-                  type='file'
-                  onChange={handleFile}
-                  id='symptomaticDiagnosis'
-                  name='symptomaticDiagnosis'
-                  accept='.pdf'
-                    required
-                  />
-              </label>
-              //? ---------------------------------------------------------- */}
-            )  : null}
+            )}
           {/*//! ------------------------------------------------------------------- */}
           {/*//! --------- Nutrition ----------------------------------------------- */}
             {profession === 'nutricionista' ? (
@@ -605,23 +581,23 @@ const Form = ({ profession }) => {
             //? --------------------------------------------------------- */}
             )  : null}
           {/*//! ------------------------------------------------------------------- */}
-          {/*//! --------- Health work --------------------------------------------- */}
-            {profession === 'auxiliar_Enfermeria' ? (
+            {!certificacionManipulacionA.includes(profession) && (
               //? ----- Professional Card --------------------------------- */}
               <label htmlFor='professionalCard' className='block text-base'>
-                Tarjeta profesional, Vigencia tarjeta profesional y antecedentes profesionales:
+                Tarjeta profesional, Resolución y/o antecedentes profesionales:
                 <input
                   type='file'
                   onChange={handleFile}
                   id='professionalCard'
                   name='professionalCard'
                   accept='.pdf'
-                    required
+                  required
                   />
               </label>
               //? --------------------------------------------------------- */}
-            )  : null}
-            {profession === 'auxiliar_Enfermeria' ? (
+            )}
+          {/* //! --------- Health work --------------------------------------------- */}
+            { rethus.includes(profession) && (
               //? ----- ReTHUS Certificate -------------------------------- */}
               <label htmlFor='rethusCertificate' className='block text-base'>
                 Certificado ReTHUS - Registro Único Nacional del Talento Humano en Salud:
@@ -635,7 +611,7 @@ const Form = ({ profession }) => {
                   />
               </label>
               //? --------------------------------------------------------- */}
-            )  : null}
+            )}
           {/*//! ------------------------------------------------------------------- */}
           </section>
         {/*//? ----- Criminal and disciplinary record certificates ----- */}

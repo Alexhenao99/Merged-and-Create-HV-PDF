@@ -38,7 +38,7 @@ import { useState } from 'react'
         id='professionsSelect'
         onChange={handleSelect}
         value={selectedProfession}
-        className='rounded-lg p-2'
+        className='rounded-lg p-2 text-xl'
       >
         <option
           key="default"
