@@ -13,6 +13,7 @@ import iconDatePng from '/src/icons/calendario.png'
 import iconIdentificationPng from '/src/icons/IconIdentification.png'
 import iconEmailPng from '/src/icons/IconEmail.png'
 import iconAddressPng from '/src/icons/IconAddress.png'
+import logoFUMDIR from '/src/icons/fumdir-logo.png'
 
 const createPDF = async (userData, { imgProfile }) => {
   const pdfDoc = await PDFDocument.create()
@@ -83,7 +84,8 @@ const mergePDFS = async (pdfCreate, pdfArrays) => {
 
   // Generar el PDF final
   const pdfBytesFinal = await pdfDoc.save()
-  const pdfBlob = new Blob([pdfBytesFinal], { type: 'application/pdf' })
+  const markWater = await addWatermarkTextToPdf(pdfBytesFinal)
+  const pdfBlob = new Blob([markWater], { type: 'application/pdf' })
 
   return pdfBlob
 }
@@ -95,6 +97,46 @@ const mostrarPDF = async () => {
   const pdfViewer = document.getElementById('pdfViewer')
   pdfViewer.src = pdfDataUri
 }
+
+// Función para agregar una marca de agua de texto a todas las páginas del PDF
+const addWatermarkTextToPdf = async (pdfBuffer) => {
+  const pdfDoc = await PDFDocument.load(pdfBuffer);
+  const watermarkImage = await await fetchIcons(logoFUMDIR.src, pdfDoc);
+
+  const pageCount = pdfDoc.getPageCount();
+  for (let i = 0; i < pageCount; i++) {
+    const page = pdfDoc.getPage(i);
+    await addWatermarkTextToPage(page, watermarkImage);
+    // await addWatermarkTextToPage(page);
+
+  }
+
+  return await pdfDoc.save();
+};
+
+// Función para agregar una marca de agua de texto a una página PDF
+const addWatermarkTextToPage = async (page, watermarkImage) => {
+  const watermarkText = 'Documento creado con la app de FUMDIR';
+  const fontSize = 15;
+
+  // page.drawText(watermarkText, {
+  //   x: 5,
+  //   y: 550,
+  //   size: fontSize,
+  //   rotate: degrees(-90),
+  //   color: rgb(0, 0, 0),
+  // });
+  const { width, height } = page.getSize();
+  const watermarkScale = watermarkImage.scaleToFit(500, 500); // Tamaño de la marca de agua
+
+  page.drawImage(watermarkImage, {
+    x: width / 2 - watermarkScale.width / 2,
+    y: height / 2 - watermarkScale.height / 2,
+    width: watermarkScale.width,
+    height: watermarkScale.height,
+    opacity: 0.3, // Opacidad de la marca de agua
+  });
+};
 
 function copiar(text) {
   // Intenta enfocar el documento antes de copiar al portapapeles
