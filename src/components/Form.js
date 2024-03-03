@@ -120,6 +120,8 @@ const Form = ({ profession }) => {
     functions: '',
   })
 
+  // const [pdfMerged, setPdfMerged] = useState()
+
   const handleFile = (e) => {
     const id = e.target.id
     const file = e.target.files[0]
@@ -229,7 +231,6 @@ const Form = ({ profession }) => {
 
     // Une los pdf con el orden establecido en fileObject
     const pdfMerged = await mergePDFS(pdfCreateBytes, orderedFilesObject)
-    // setPdfMerged(pdfMerged)
 
     const downloadLink = URL.createObjectURL(pdfMerged);
     const a = document.createElement('a');
@@ -248,6 +249,7 @@ const Form = ({ profession }) => {
   }
 
   //! -------------------- Render PDF ------------------------------------------------------------------------------
+  // setPdfMerged(pdfMerged)
   // const renderPdf = async () => {
   //   if (pdfMerged instanceof Blob) {
   //     const pdfUrl = URL.createObjectURL(pdfMerged)
@@ -442,7 +444,7 @@ const Form = ({ profession }) => {
               placeholder='Escribe tu perfil en máximo 800 caracteres mínimo 500.'
               rows='10'
               cols='60'
-              className={`${!errors.profile ? 'max-w-max max-h-28 min-h-0 md:max-w-5xl md:min-w-min md:max-h-96' : 'border-red focus:border-red valid:border-red text-red max-w-max max-h-28 min-h-0 md:max-w-5xl md:min-w-min md:max-h-96'}`}
+              className={`${!errors.profile ? 'max-w-max max-h-28 min-h-[168px] md:max-w-5xl md:min-w-min md:max-h-96' : 'border-red focus:border-red valid:border-red text-red max-w-max max-h-28 min-h-[168px] md:max-w-5xl md:min-w-min md:max-h-96'}`}
               maxLength={800}
               required
             ></textarea>
@@ -524,7 +526,7 @@ const Form = ({ profession }) => {
           {/*//? --------------------------------------------------------- */}
           {/*//? ----- Occupational Medical Fitness ---------------------- */}
             <label htmlFor='occupationalMedical' className='block text-base'>
-              Certificado de Aptitud Médica Ocupacional (todos):
+              Certificado de Aptitud Médica Ocupacional:
               <input
                 type='file'
                 onChange={handleFile}
