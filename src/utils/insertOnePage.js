@@ -222,7 +222,7 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
     color: rgb(0, 0, 0)
   })
   const profileHeight = estimateTextHeight(userData.profile, font, fontTextSize, maxWidth, lineHeight)
-  yRight -= profileHeight + division
+  yRight -= profileHeight + division * 2
 
   //? Experiencia Laboral //
   page.drawText('EXPERIENCIA LABORAL', {
@@ -299,18 +299,18 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
       color: rgb(0, 0, 0)
     })
     const functionHeight = estimateTextHeight(work.functions, font, fontTextSize, maxWidth, lineHeight)
-    yRight -= functionHeight + division
+    yRight -= functionHeight
   })
 
   //? Text Referencias //
   page.drawText('REFERENCIAS PERSONALES', {
     x: 230,
-    y: yRight - 20,
+    y: yRight,
     size: fontSubtitlesSize,
     font: fontBold,
     color: rgb(0, 0, 0)
   })
-  yRight -= division + 20
+  yRight -= division
 
   //!TODO Referencias personales //
   page.drawText(userData.personalReferences[0].name, {
