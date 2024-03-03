@@ -176,7 +176,7 @@ const FormWorkHistory = ({ onWorkHistoryChange }) => {
                   required
                 />
               </label>
-              <label className={!errors.functions ? 'md:w-[475px]' : 'text-red md:w-[475px]'}>
+              <label className={!errors.functions ? 'md:w-full' : 'text-red md:w-[950px]'}>
                 {errors.functions && <p className='text-red text-xs p-0 m-0'>{errors.functions} </p>}
                 Funciones
                 <textarea
@@ -187,7 +187,7 @@ const FormWorkHistory = ({ onWorkHistoryChange }) => {
                   rows='10'
                   cols='60'
                   value={history.functions}
-                  className={`${!errors.functions ? 'max-w-max max-h-28 min-h-[168px] md:max-w-5xl md:min-w-[457px] md:max-h-96' : 'max-w-max max-h-28 min-h-[168px] md:max-w-5xl md:min-w-[457px] md:max-h-96 border-red focus:border-red valid:border-red text-red'}`}
+                  className={`${!errors.functions ? 'max-w-max max-h-28 min-h-[168px] md:max-w-5xl md:min-w-full md:max-h-96' : 'max-w-max max-h-28 min-h-[168px] md:max-w-5xl md:min-w-full md:max-h-96 border-red focus:border-red valid:border-red text-red'}`}
                   maxLength={800}
                   required
                 ></textarea>
