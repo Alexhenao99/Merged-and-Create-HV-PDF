@@ -35,10 +35,10 @@ const Finish = () => {
         El archivo PDF se ha descargado en su dispositivo con el nombre <span className='text-blue_button'> CV de {userData?.name} - {userData?.profession}.pdf </span>.
       </p>
       <p>
-        Por favor, envié el archivo al siguiente correo haciendo clic en el enlace: <a className='text-blue_button hover:text-blue_button_hover underline' href={`mailto:waha0522@gmail.com?subject=${userData?.name} - ${userData?.profession}`}>alexanderhenao0522@gmail.com &#128270;</a>
+        Por favor, envié el archivo al siguiente correo haciendo clic en el enlace: <a className='text-blue_button hover:text-blue_button_hover underline' href={`mailto:talentohumano@fumdir.org.com?subject=${userData?.name} - ${userData?.profession}`}> talentohumano@fumdir.org &#128270;</a>
       </p>
       <a href="https://classroom.google.com/c/NTQxOTc0NTkwNjE1?hl=es&cjc=6osma4d" target="_blank" rel="noopener noreferrer" className='flex flex-col items-center text-center'>
-        <p className='text-dark p-0 m-0'>
+        <p className='text-2xl text-dark p-0 m-0'>
           Recuerde realizar el curso de Inducción o Reinducción
         </p>
         <Image src={classroom} alt="Logo Fumdir" className='m-0 py-6 w-40 h-28 md:w-60 md:h-40' />
