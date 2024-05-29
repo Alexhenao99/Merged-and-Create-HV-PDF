@@ -593,7 +593,7 @@ const Form = ({ profession }) => {
                   id='professionalCard'
                   name='professionalCard'
                   accept='.pdf'
-                  required
+                  // required
                   />
               </label>
               //? --------------------------------------------------------- */}
