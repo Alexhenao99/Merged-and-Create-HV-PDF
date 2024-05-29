@@ -134,7 +134,7 @@ const addWatermarkTextToPage = async (page, watermarkImage) => {
     y: height / 2 - watermarkScale.height / 2,
     width: watermarkScale.width,
     height: watermarkScale.height,
-    opacity: 0.3, // Opacidad de la marca de agua
+    opacity: 0.1, // Opacidad de la marca de agua
   });
 };
 

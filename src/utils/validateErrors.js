@@ -11,7 +11,7 @@ const validateData = (validar) => {
   if ('cc' in validar) {
     if (validar.cc === '') errors.cc = 'Este Campo Es Obligatorio *'
     else if (!/^(CC|CE|PEP|DNI|SRC|PA)/.test(validar.cc)) errors.cc = 'El tipo de documento es inválido.'
-    else if (!/^(CC|CE|PEP|DNI|SRC|PA)\s\d{10,12}$/.test(validar.cc)) errors.cc = 'El numero de documento es inválido.'
+    else if (!/^(CC|CE|PEP|DNI|SRC|PA)\s\d{7,12}$/.test(validar.cc)) errors.cc = 'El numero de documento es inválido.'
     else if (validar.cc.length) errors.cc = ''
   }
 
