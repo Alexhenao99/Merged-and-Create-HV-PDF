@@ -11,6 +11,14 @@ const Finish = () => {
   const router = useRouter()
   const [userData, setUserData] = useState(null)
 
+  const handleLinkClick = () => {
+    // Borra los datos del localStorage
+    localStorage.removeItem('UserData');
+    localStorage.removeItem('userData');
+    // Redirige a la página principal
+    router.push('/');
+  };
+
   // verifica si hay datos guardados en el local storage
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -44,7 +52,7 @@ const Finish = () => {
         <Image src={classroom} alt="Logo Fumdir" className='m-0 py-6 w-40 h-28 md:w-60 md:h-40' />
       </a>
 
-      <Link href={`/`} className='text-dark hover:text-white rounded-md py-3 px-7 mt-4 bg-blue_button hover:bg-blue_button_hover border-none md:py-4 md:px-7 md:mt-8 md:text-xl'>Diligencar nuevamente el formulario</Link>
+      <Link href={`/`} onClick={handleLinkClick} className='text-dark hover:text-white rounded-md py-3 px-7 mt-4 bg-blue_button hover:bg-blue_button_hover border-none md:py-4 md:px-7 md:mt-8 md:text-xl'>Diligenciar nuevamente el formulario</Link>
     </main>
   )
 }

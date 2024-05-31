@@ -93,14 +93,14 @@ const mergePDFS = async (pdfCreate, pdfArrays) => {
 const mostrarPDF = async () => {
   // Suponiendo que ya tienes los bytes del PDF final en la variable mergedPDFBytes
 
-  const pdfDataUri = await PDFDocument.load(mergedPDFBytes, { ignoreEncryption: true }).toDataUri()
+  const pdfDataUri = await PDFDocument.load(mergedPDFBytes).toDataUri()
   const pdfViewer = document.getElementById('pdfViewer')
   pdfViewer.src = pdfDataUri
 }
 
 // Función para agregar una marca de agua de texto a todas las páginas del PDF
 const addWatermarkTextToPdf = async (pdfBuffer) => {
-  const pdfDoc = await PDFDocument.load(pdfBuffer, { ignoreEncryption: true });
+  const pdfDoc = await PDFDocument.load(pdfBuffer);
   const watermarkImage = await await fetchIcons(logoFUMDIR.src, pdfDoc);
 
   const pageCount = pdfDoc.getPageCount();

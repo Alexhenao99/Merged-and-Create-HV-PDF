@@ -15,7 +15,6 @@ const Form = ({ profession }) => {
   const router = useRouter()
   const professionData = professions
 
-  // const [pdfMerged, setPdfMerged] = useState()
   const [fileReferences, setFileReferences] = useState({
     identificationScan: null,
     militaryPassbook: null,
@@ -86,6 +85,14 @@ const Form = ({ profession }) => {
     personalReferences: []
   })
 
+  useEffect(() => {
+    // Cargar datos desde localStorage cuando el componente se monta
+    const savedUserData = localStorage.getItem('UserData');
+    if (savedUserData) {
+      setUserData(JSON.parse(savedUserData));
+    }
+  }, []);
+
   const [errors, setErrors] = useState({
     userName: '',
     biologicalSex: '',
@@ -155,6 +162,9 @@ const Form = ({ profession }) => {
     })
 
     setErrors({...errors, ...validationsErrors});
+
+    // Guardar datos en localStorage cuando el estado del formulario cambia
+    localStorage.setItem('UserData', JSON.stringify(userData));
   }
 
   const handleAcademicHistoryChange = (updatedAcademicHistory, validationsErrors) => {
@@ -164,6 +174,9 @@ const Form = ({ profession }) => {
     })
 
     setErrors({...errors, ...validationsErrors});
+
+    // Guardar datos en localStorage cuando el estado del formulario cambia
+    // localStorage.setItem('UserData', JSON.stringify(userData));
   }
 
   const handleWorkHistoryChange = (updatedWorkHistory, validationsErrors) => {
@@ -173,6 +186,9 @@ const Form = ({ profession }) => {
     })
 
     setErrors({...errors, ...validationsErrors});
+
+    // Guardar datos en localStorage cuando el estado del formulario cambia
+    // localStorage.setItem('UserData', JSON.stringify(userData));
   }
 
   const handlePersonalReferencesChange = (updatedPersonalReferences, validationsErrors) => {
@@ -182,6 +198,9 @@ const Form = ({ profession }) => {
     })
 
     setErrors({...errors, ...validationsErrors});
+
+    // Guardar datos en localStorage cuando el estado del formulario cambia
+    // localStorage.setItem('UserData', JSON.stringify(userData));
   }
 
   const handleSubmit = async (e) => {
@@ -231,6 +250,7 @@ const Form = ({ profession }) => {
 
     // Une los pdf con el orden establecido en fileObject
     const pdfMerged = await mergePDFS(pdfCreateBytes, orderedFilesObject)
+    // setPdfMerged(pdfMerged)
 
     const downloadLink = URL.createObjectURL(pdfMerged);
     const a = document.createElement('a');
@@ -249,7 +269,6 @@ const Form = ({ profession }) => {
   }
 
   //! -------------------- Render PDF ------------------------------------------------------------------------------
-  // setPdfMerged(pdfMerged)
   // const renderPdf = async () => {
   //   if (pdfMerged instanceof Blob) {
   //     const pdfUrl = URL.createObjectURL(pdfMerged)
@@ -321,6 +340,7 @@ const Form = ({ profession }) => {
               name='userName'
               placeholder='Nombres y Apellidos'
               className={`${!errors.userName? '' : 'border-red focus:border-red valid:border-red text-red'}`}
+              value={userData.userName}
               required
             />
           </label>
@@ -333,6 +353,7 @@ const Form = ({ profession }) => {
               id='date'
               name='date'
               className={`${!errors.date ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
+              value={userData.date}
               required
             />
           </label>
@@ -348,6 +369,7 @@ const Form = ({ profession }) => {
               name='cc'
               placeholder='CC 1234567890'
               className={`${!errors.cc ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
+              value={userData.cc}
               required
             />
           </label>
@@ -363,6 +385,7 @@ const Form = ({ profession }) => {
               placeholder='312 123 4567'
               maxLength={12}
               className={`${!errors.phone ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
+              value={userData.phone}
               required
             />
           </label>
@@ -376,6 +399,7 @@ const Form = ({ profession }) => {
               name='email'
               placeholder='Ejemplo@gmail.com'
               className={`${!errors.email ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
+              value={userData.email}
               required
             />
           </label>
@@ -389,6 +413,7 @@ const Form = ({ profession }) => {
               name='address'
               placeholder='Kr. 90 # 149 - 73'
               className={`${!errors.address ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
+              value={userData.address}
               required
             />
           </label>
@@ -402,6 +427,7 @@ const Form = ({ profession }) => {
               name='profession'
               placeholder='Técnico Operativo'
               className={`${!errors.profession ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
+              value={userData.profession}
               required
             />
           </label>
@@ -446,6 +472,7 @@ const Form = ({ profession }) => {
               cols='60'
               className={`${!errors.profile ? 'max-w-max max-h-28 min-h-[168px] md:max-w-5xl md:min-w-min md:max-h-96' : 'border-red focus:border-red valid:border-red text-red max-w-max max-h-28 min-h-[168px] md:max-w-5xl md:min-w-min md:max-h-96'}`}
               maxLength={800}
+              value={userData.profile}
               required
             ></textarea>
           </label>
