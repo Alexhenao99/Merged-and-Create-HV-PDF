@@ -27,7 +27,8 @@ const Form = ({ profession }) => {
     antecedentesJud: null,
     SNMC: null,
     delitosSexuales: null,
-    socialSecurity: null,
+    eps: null,
+    pension: null,
     occupationalMedical: null,
     generalMedicalCertificate: null,
     symptomaticDiagnosis: null,
@@ -62,7 +63,8 @@ const Form = ({ profession }) => {
     'antecedentesJud',
     'SNMC',
     'delitosSexuales',
-    'socialSecurity',
+    'eps',
+    'pension',
     'occupationalMedical',
     'professionalCardFoodHandling',
     'savingsAccount',
@@ -537,14 +539,26 @@ const Form = ({ profession }) => {
               />
             </label>
           {/*//? --------------------------------------------------------- */}
-          {/*//? ----- Social Security ----------------------------------- */}
-            <label htmlFor='socialSecurity' className='block text-base'>
-            Certificado de afiliación a Seguridad Social (Salud y Pensión):
+          {/*//? ----- EPS ----------------------------------- */}
+            <label htmlFor='eps' className='block text-base'>
+            Certificado de afiliación a EPS:
               <input
                 type='file'
                 onChange={handleFile}
-                id='socialSecurity'
-                name='socialSecurity'
+                id='eps'
+                name='eps'
+                accept='.pdf'
+              />
+            </label>
+          {/*//? --------------------------------------------------------- */}
+          {/*//? ----- Pension ----------------------------------- */}
+          <label htmlFor='pension' className='block text-base'>
+          Certificado de afiliación a Pensión:
+              <input
+                type='file'
+                onChange={handleFile}
+                id='pension'
+                name='pension'
                 accept='.pdf'
               />
             </label>
