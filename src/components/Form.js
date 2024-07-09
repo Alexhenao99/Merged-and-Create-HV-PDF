@@ -369,7 +369,6 @@ const Form = ({ profession }) => {
               name='cc'
               placeholder='CC 1234567890'
               className={`${!errors.cc ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
-              // value={userData.cc}
               required
             />
           </label>
@@ -385,7 +384,6 @@ const Form = ({ profession }) => {
               placeholder='312 123 4567'
               maxLength={12}
               className={`${!errors.phone ? '' : 'border-red focus:border-red valid:border-red text-red'}`}
-              // value={userData.phone}
               required
             />
           </label>
