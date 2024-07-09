@@ -19,7 +19,7 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
   const fontTextSize = 12
   const fontDate = 10.5
   const lineHeight = 15
-  const division = 30
+  const division = 25
   const divisionIcon = 20
   const IconHeight = 10
 
@@ -299,7 +299,7 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
       color: rgb(0, 0, 0)
     })
     const functionHeight = estimateTextHeight(work.functions, font, fontTextSize, maxWidth, lineHeight)
-    yRight -= functionHeight
+    yRight -= functionHeight + division
   })
 
   //? Text Referencias //
@@ -366,25 +366,29 @@ export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, f
 }
 
 export const estimateTextHeight = (text, font, size, maxWidth, lineHeight) => {
-  const words = text.split(/\s+/) // Dividir por espacios en blanco y saltos de línea
+  const paragraphs = text.split('\n') // Dividir por saltos de línea
   let lines = []
-  let currentLine = words[0]
 
-  for (let i = 1; i < words.length; i++) {
-    const word = words[i]
-    const width = font.widthOfTextAtSize(currentLine + ' ' + word, size)
+  paragraphs.forEach(paragraph => {
+    const words = paragraph.split(/\s+/) // Dividir por espacios en blanco
+    let currentLine = words[0]
 
-    if (width <= maxWidth) {
-      currentLine += ' ' + word
-    } else {
-      lines.push(currentLine)
-      currentLine = word
+    for (let i = 1; i < words.length; i++) {
+      const word = words[i]
+      const width = font.widthOfTextAtSize(currentLine + ' ' + word, size)
+
+      if (width <= maxWidth) {
+        currentLine += ' ' + word
+      } else {
+        lines.push(currentLine)
+        currentLine = word
+      }
     }
-  }
 
-  if (currentLine.length > 0) {
-    lines.push(currentLine)
-  }
+    if (currentLine.length > 0) {
+      lines.push(currentLine)
+    }
+  })
 
   return lines.length * lineHeight
 }
