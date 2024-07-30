@@ -42,7 +42,8 @@ const createPDF = async (userData, { imgProfile }) => {
   insertOnePage(pdfDoc, page, userData, yStartLeft, yStartRight, font, fontBold, iconContact, iconDate, iconIdentification, iconEmail, iconAddress, PDFImageProfile)
 
   const pdfBytes = await pdfDoc.save()
-  return pdfBytes
+  const markWater = await addWatermarkTextToPdf(pdfBytes, "PDFCreated")
+  return markWater
 }
 
 const imageToPDF = async (imageBytes) => {
@@ -76,7 +77,8 @@ const mergePDFS = async (pdfCreate, pdfArrays) => {
     if (pdfArrays.hasOwnProperty(key)) {
       const file = pdfArrays[key]
       const pdfBytes = await file.arrayBuffer()
-      const uploadedPdf = await PDFDocument.load(pdfBytes, { ignoreEncryption: true })
+      const markWater = await addWatermarkTextToPdf(pdfBytes, "PdfFinal")
+      const uploadedPdf = await PDFDocument.load(markWater, { ignoreEncryption: true })
       const copiedPages = await pdfDoc.copyPages(uploadedPdf, uploadedPdf.getPageIndices())
       copiedPages.forEach((page) => pdfDoc.addPage(page))
     }
@@ -84,8 +86,7 @@ const mergePDFS = async (pdfCreate, pdfArrays) => {
 
   // Generar el PDF final
   const pdfBytesFinal = await pdfDoc.save()
-  const markWater = await addWatermarkTextToPdf(pdfBytesFinal)
-  const pdfBlob = new Blob([markWater], { type: 'application/pdf' })
+  const pdfBlob = new Blob([pdfBytesFinal], { type: 'application/pdf' })
 
   return pdfBlob
 }
@@ -99,33 +100,21 @@ const mostrarPDF = async () => {
 }
 
 // Función para agregar una marca de agua de texto a todas las páginas del PDF
-const addWatermarkTextToPdf = async (pdfBuffer) => {
+const addWatermarkTextToPdf = async (pdfBuffer, type) => {
   const pdfDoc = await PDFDocument.load(pdfBuffer);
   const watermarkImage = await await fetchIcons(logoFUMDIR.src, pdfDoc);
 
   const pageCount = pdfDoc.getPageCount();
   for (let i = 0; i < pageCount; i++) {
     const page = pdfDoc.getPage(i);
-    await addWatermarkTextToPage(page, watermarkImage);
-    // await addWatermarkTextToPage(page);
-
+    type === "PdfFinal" ? await addWatermarkTextToPage(page, watermarkImage) : await addWatermarkTextToPDFCreate(page, watermarkImage);
   }
 
   return await pdfDoc.save();
 };
 
-// Función para agregar una marca de agua de texto a una página PDF
-const addWatermarkTextToPage = async (page, watermarkImage) => {
-  const watermarkText = 'Documento creado con la app de FUMDIR';
-  const fontSize = 15;
-
-  // page.drawText(watermarkText, {
-  //   x: 5,
-  //   y: 550,
-  //   size: fontSize,
-  //   rotate: degrees(-90),
-  //   color: rgb(0, 0, 0),
-  // });
+// Función para agregar una marca de agua al PDF Creado
+const addWatermarkTextToPDFCreate = async (page, watermarkImage) => {
   const { width, height } = page.getSize();
   const watermarkScale = watermarkImage.scaleToFit(500, 500); // Tamaño de la marca de agua
 
@@ -135,6 +124,28 @@ const addWatermarkTextToPage = async (page, watermarkImage) => {
     width: watermarkScale.width,
     height: watermarkScale.height,
     opacity: 0.1, // Opacidad de la marca de agua
+  });
+};
+
+// Función para agregar una marca de agua al PDF Final
+const addWatermarkTextToPage = async (page, watermarkImage) => {
+  const watermarkText = 'Documento creado con la app web de FUMDIR';
+  const fontSize = 15;
+  page.drawText(watermarkText, {
+    x: 5,
+    y: 550,
+    size: fontSize,
+    rotate: degrees(-90),
+    color: rgb(0.1608, 0.3451, 0.5569),
+  });
+
+  const watermarkScale = watermarkImage.scaleToFit(100, 100); // Tamaño de la marca de agua
+  page.drawImage(watermarkImage, {
+    x: 525,
+    y: 10,
+    width: watermarkScale.width,
+    height: watermarkScale.height,
+    opacity: 1, // Opacidad de la marca de agua
   });
 };
 
