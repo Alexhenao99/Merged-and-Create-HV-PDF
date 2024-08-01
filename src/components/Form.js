@@ -542,7 +542,7 @@ const Form = ({ profession }) => {
           {/*//? --------------------------------------------------------- */}
           {/*//? ----- EPS ----------------------------------- */}
             <label htmlFor='eps' className='block text-base'>
-            Certificado de afiliación a EPS:
+            Certificado de afiliación a EPS: <span className='text-gray text-sm'> Opcional </span>
               <input
                 type='file'
                 onChange={handleFile}
@@ -554,7 +554,7 @@ const Form = ({ profession }) => {
           {/*//? --------------------------------------------------------- */}
           {/*//? ----- Pension ----------------------------------- */}
           <label htmlFor='pension' className='block text-base'>
-          Certificado de afiliación a Pensión:
+          Certificado de afiliación a Pensión: <span className='text-gray text-sm'> Opcional </span>
               <input
                 type='file'
                 onChange={handleFile}
@@ -566,20 +566,19 @@ const Form = ({ profession }) => {
           {/*//? --------------------------------------------------------- */}
           {/*//? ----- Occupational Medical Fitness ---------------------- */}
             <label htmlFor='occupationalMedical' className='block text-base'>
-              Certificado de Aptitud Médica Ocupacional:
+              Certificado de Aptitud Médica Ocupacional: <span className='text-gray text-sm'> Opcional </span>
               <input
                 type='file'
                 onChange={handleFile}
                 id='occupationalMedical'
                 name='occupationalMedical'
                 accept='.pdf'
-                required
               />
             </label>
           {/*//? --------------------------------------------------------- */}
           {/*//? ----- Savings Account Certificate ----------------------- */}
             <label htmlFor='savingsAccount' className='block text-base'>
-              Certificado de Cuenta de Ahorros del Banco Davivienda:
+              Certificado de Cuenta de Ahorros del Banco Davivienda: <span className='text-gray text-sm'> Opcional </span>
               <input
                 type='file'
                 onChange={handleFile}
@@ -626,7 +625,7 @@ const Form = ({ profession }) => {
             {!certificacionManipulacionA.includes(profession) && (
               //? ----- Professional Card --------------------------------- */}
               <label htmlFor='professionalCard' className='block text-base'>
-                Tarjeta profesional, Resolución y/o antecedentes profesionales:
+                Tarjeta profesional, Resolución y/o antecedentes profesionales: <span className='text-gray text-sm'> Opcional </span>
                 <input
                   type='file'
                   onChange={handleFile}
