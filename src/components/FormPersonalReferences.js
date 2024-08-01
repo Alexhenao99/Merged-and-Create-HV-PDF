@@ -43,6 +43,7 @@ const FormPersonalReference = ({ onPersonalReferenceChange }) => {
     <div>
       <h2>Referencias Personales</h2>
       <section className='flex flex-col text-left mx-auto'>
+        <span className='text-center'>Digitar solo un Nombre y un Apellido como los ejemplos</span>
         {personalReference.map((reference, index) => (
           <div
             key={index}
