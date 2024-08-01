@@ -323,6 +323,7 @@ const Form = ({ profession }) => {
           >
           <label htmlFor='imgProfile' className='text-lg'>
             Foto de Perfil:
+            <span className='text-xs text-blue_title hover:text-blue_button_hover'>Tipos validos: PNG y JPG</span>
             <input
               type='file'
               onChange={handleImages}

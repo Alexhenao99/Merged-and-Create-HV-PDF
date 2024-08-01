@@ -101,7 +101,7 @@ const mostrarPDF = async () => {
 
 // Función para agregar una marca de agua de texto a todas las páginas del PDF
 const addWatermarkTextToPdf = async (pdfBuffer, type) => {
-  const pdfDoc = await PDFDocument.load(pdfBuffer);
+  const pdfDoc = await PDFDocument.load(pdfBuffer, { ignoreEncryption: true });
   const watermarkImage = await await fetchIcons(logoFUMDIR.src, pdfDoc);
 
   const pageCount = pdfDoc.getPageCount();
