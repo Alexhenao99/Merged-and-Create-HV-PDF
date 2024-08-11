@@ -15,36 +15,87 @@ import iconEmailPng from '/src/icons/IconEmail.png'
 import iconAddressPng from '/src/icons/IconAddress.png'
 import logoFUMDIR from '/src/icons/fumdir-logo.png'
 
+// const createPDF = async (userData, { imgProfile }) => {
+//   const pdfDoc = await PDFDocument.create()
+//   const page = pdfDoc.addPage(PageSizes.A4)
+//   const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
+//   const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
+
+//   // Icons
+//   const iconContact = await fetchIcons(iconContactPng.src, pdfDoc)
+//   const iconDate = await fetchIcons(iconDatePng.src, pdfDoc)
+//   const iconIdentification = await fetchIcons(iconIdentificationPng.src, pdfDoc)
+//   const iconEmail = await fetchIcons(iconEmailPng.src, pdfDoc)
+//   const iconAddress = await fetchIcons(iconAddressPng.src, pdfDoc)
+
+//   // Traer la Imagen de perfil
+//   const PDFImageProfile = await imgPDFProfile(imgProfile, pdfDoc)
+
+//   // Formatos
+//   let yStartLeft = 582
+//   let yStartRight = 790
+
+//   // Diseño del pdf
+//   pageDesign(page, rgb, degrees)
+
+//   // Insertar datos
+//   insertOnePage(pdfDoc, page, userData, yStartLeft, yStartRight, font, fontBold, iconContact, iconDate, iconIdentification, iconEmail, iconAddress, PDFImageProfile)
+
+//   const pdfBytes = await pdfDoc.save()
+//   const markWater = await addWatermarkTextToPdf(pdfBytes, "PDFCreated")
+//   return markWater
+// }
+
 const createPDF = async (userData, { imgProfile }) => {
-  const pdfDoc = await PDFDocument.create()
-  const page = pdfDoc.addPage(PageSizes.A4)
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
-  const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
+  const pdfDoc = await PDFDocument.create();
+  const page = pdfDoc.addPage(PageSizes.A4);
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+  const iconContact = await fetchIcons(iconContactPng.src, pdfDoc);
+  const iconDate = await fetchIcons(iconDatePng.src, pdfDoc);
+  const iconIdentification = await fetchIcons(iconIdentificationPng.src, pdfDoc);
+  const iconEmail = await fetchIcons(iconEmailPng.src, pdfDoc);
+  const iconAddress = await fetchIcons(iconAddressPng.src, pdfDoc);
 
   // Icons
-  const iconContact = await fetchIcons(iconContactPng.src, pdfDoc)
-  const iconDate = await fetchIcons(iconDatePng.src, pdfDoc)
-  const iconIdentification = await fetchIcons(iconIdentificationPng.src, pdfDoc)
-  const iconEmail = await fetchIcons(iconEmailPng.src, pdfDoc)
-  const iconAddress = await fetchIcons(iconAddressPng.src, pdfDoc)
+  const icons = {
+    contact: iconContact,
+    date: iconDate,
+    identification: iconIdentification,
+    email: iconEmail,
+    address: iconAddress,
+  }
 
-  // Traer la Imagen de perfil
-  const PDFImageProfile = await imgPDFProfile(imgProfile, pdfDoc)
+  // Escalar íconos
+  const iconsScale = {
+    contact: iconContact.scaleToFit(25, 25),
+    date: iconDate.scaleToFit(25, 25),
+    identification: iconIdentification.scaleToFit(25, 25),
+    email: iconEmail.scaleToFit(25, 25),
+    address: iconAddress.scaleToFit(25, 25),
+
+  }
+
+  // Imagen de perfil
+  const PDFImageProfile = await imgPDFProfile(imgProfile, pdfDoc);
+  const imgProfileScale = PDFImageProfile.scaleToFit(150, 200);
 
   // Formatos
-  let yStartLeft = 582
-  let yStartRight = 790
+  let yStartLeft = 582;
+  let yStartRight = 790;
 
   // Diseño del pdf
-  pageDesign(page, rgb, degrees)
+  pageDesign(page, rgb, degrees);
 
   // Insertar datos
-  insertOnePage(pdfDoc, page, userData, yStartLeft, yStartRight, font, fontBold, iconContact, iconDate, iconIdentification, iconEmail, iconAddress, PDFImageProfile)
+  insertOnePage(pdfDoc, page, userData, yStartLeft, yStartRight, font, fontBold, icons, iconsScale, PDFImageProfile, imgProfileScale);
 
-  const pdfBytes = await pdfDoc.save()
-  const markWater = await addWatermarkTextToPdf(pdfBytes, "PDFCreated")
-  return markWater
-}
+  const pdfBytes = await pdfDoc.save();
+  const markWater = await addWatermarkTextToPdf(pdfBytes, "PDFCreated");
+  return markWater;
+};
+
 
 const imageToPDF = async (imageBytes) => {
   const pdfDoc = await PDFDocument.create()

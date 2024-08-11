@@ -1,369 +1,337 @@
 import { PageSizes, rgb, degrees } from 'pdf-lib'
 import pageDesign from './pageDesign'
 
-export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, font, fontBold, iconContact, iconDate, iconIdentification, iconEmail, iconAddress, PDFImageProfile) => {
-  // Escalas
-  const iconContactScale = iconContact.scaleToFit(25, 25)
-  const iconDateScale = iconDate.scaleToFit(25, 25)
-  const iconIdentificationScale = iconIdentification.scaleToFit(25, 25)
-  const iconEmailScale = iconEmail.scaleToFit(25, 25)
-  const iconAddressScale = iconAddress.scaleToFit(25, 25)
-  const imgProfileScale = PDFImageProfile.scaleToFit(150, 200)
+export const insertOnePage = (pdfDoc, page, userData, yStartLeft, yStartRight, font, fontBold, icons, iconsScale, PDFImageProfile, imgProfileScale) => {
+  let pageN = page;
+  let yLeft = yStartLeft;
+  let yRight = yStartRight;
 
-  // Formatos
-  let yLeft = yStartLeft
-  let yRight = yStartRight
-  const maxWidth = 340
-  const fontTitleSize = 25
-  const fontSubtitlesSize = 14
-  const fontTextSize = 12
-  const fontDate = 10.5
-  const lineHeight = 15
-  const division = 25
-  const divisionIcon = 20
-  const IconHeight = 10
+  const checkNewPage = () => {
+    if (yRight <= 100) {
+      pageN = pdfDoc.addPage(PageSizes.A4);
+      pageDesign(pageN, rgb, degrees);
+      yRight = 760;
+    }
+    return yRight;
+  };
 
-  //* ---------------------------------------------- Left ---------------------------------------------- *\\
+  const drawTextWithIcon = (text, icon, iconScale, xIcon, yPos, xText, fontSize) => {
+    pageN.drawImage(icon, {
+      x: xIcon,
+      y: yPos,
+      width: iconScale.width,
+      height: iconScale.height
+    });
 
-  //!TODO Imagen de perfil //
-  page.drawImage(PDFImageProfile, {
+    pageN.drawText(text, {
+      x: xText,
+      y: yPos - 4 + iconScale.height / 2,
+      font: font,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+  };
+
+  const drawSectionHeader = (text, xPos, yPos) => {
+    pageN.drawText(text, {
+      x: xPos,
+      y: yPos,
+      font: fontBold,
+      size: 14,
+      color: rgb(0, 0, 0),
+    });
+  };
+
+  // * ------------------------------------------- Sección izquierda ---------------------------------------------
+
+  // Imagen de perfil
+  pageN.drawImage(PDFImageProfile, {
     x: 44,
     y: 612,
     width: imgProfileScale.width,
     height: imgProfileScale.height
-  })
+  });
 
-  //? Text Contacto //
-  page.drawText('CONTACTO', {
-    x: 57,
-    y: yLeft,
-    lineHeight: lineHeight,
-    size: fontSubtitlesSize,
-    font: fontBold,
-    color: rgb(0, 0, 0)
-  })
-  yLeft -= lineHeight + divisionIcon
+  // Sección de contacto
+  drawSectionHeader('CONTACTO', 57, yLeft);
+  yLeft -= 30;
 
-  //! Icon Contact //
-  page.drawImage(iconContact, {
-    x: 25,
-    y: yLeft,
-    width: iconContactScale.width,
-    height: iconContactScale.height
-  })
+  drawTextWithIcon(userData.phone, icons.contact, iconsScale.contact, 25, yLeft, 55, 12);
+  yLeft -= 30;
 
-  //!TODO Contact //
-  page.drawText(userData.phone, {
-    x: 55,
-    y: yLeft - 4 + iconContactScale.height / 2,
-    font: font,
-    size: fontTextSize,
-    color: rgb(0, 0, 0)
-  })
-  yLeft -= IconHeight + divisionIcon
+  drawTextWithIcon(userData.date, icons.date, iconsScale.date, 21, yLeft, 55, 12);
+  yLeft -= 25;
 
-  //! Icon Date //
-  page.drawImage(iconDate, {
-    x: 21,
-    y: yLeft,
-    width: iconDateScale.width,
-    height: iconDateScale.height
-  })
+  drawTextWithIcon(userData.cc, icons.identification, iconsScale.identification, 20, yLeft, 55, 12);
+  yLeft -= 30;
 
-  //!TODO Date //
-  page.drawText(userData.date, {
-    x: 55,
-    y: yLeft - 4 + iconDateScale.height / 2,
-    font: font,
-    size: fontTextSize,
-    color: rgb(0, 0, 0)
-  })
-  yLeft -= 2 + divisionIcon
+  drawTextWithIcon(userData.email, icons.email, iconsScale.email, 20, yLeft, 55, userData.email.length > 25 ? 10.5 : 12);
+  yLeft -= 30;
 
-  //! Icon Identification //
-  page.drawImage(iconIdentification, {
-    x: 20,
-    y: yLeft,
-    width: iconIdentificationScale.width,
-    height: iconIdentificationScale.height
-  })
+  drawTextWithIcon(userData.address, icons.address, iconsScale.address, 23, yLeft, 55, userData.address.length > 25 ? 10.5 : 12);
+  yLeft -= 25;
 
-  //!TODO Identification //
-  page.drawText(userData.cc, {
-    x: 55,
-    y: yLeft - 4 + iconIdentificationScale.height / 2,
-    font: font,
-    size: fontTextSize,
-    color: rgb(0, 0, 0)
-  })
-  yLeft -= IconHeight + divisionIcon
+  // Sección de formación académica
+  drawSectionHeader('FORMACIÓN ACADÉMICA', 14, yLeft);
+  yLeft -= 25;
 
-  //! Icon Email //
-  page.drawImage(iconEmail, {
-    x: 20,
-    y: yLeft,
-    width: iconEmailScale.width,
-    height: iconEmailScale.height
-  })
-
-  //!TODO Email //
-  page.drawText(userData.email, {
-    x: 55,
-    y: yLeft - 4 + iconEmailScale.height / 2,
-    font: font,
-    size: userData.email.length > 25 ? fontDate : fontTextSize,
-    color: rgb(0, 0, 0)
-  })
-  yLeft -= IconHeight + divisionIcon
-
-  //! Icon Address //
-  page.drawImage(iconAddress, {
-    x: 23,
-    y: yLeft,
-    width: iconAddressScale.width,
-    height: iconAddressScale.height
-  })
-
-  //!TODO Address //
-  page.drawText(userData.address, {
-    x: 55,
-    y: yLeft - 4 + iconAddressScale.height / 2,
-    maxWidth: 200,
-    font: font,
-    size: userData.address.length > 25 ? fontDate : fontTextSize,
-    color: rgb(0, 0, 0)
-  })
-  yLeft -= division
-
-  //? Text Formación académica //
-  page.drawText('FORMACIÓN ACADÉMICA', {
-    x: 14,
-    y: yLeft,
-    size: fontSubtitlesSize,
-    font: fontBold,
-    color: rgb(0, 0, 0)
-  })
-  yLeft -= division
-
-  //!TODO Formación académica //
-  userData.academicHistory.map((academic) => {
-    page.drawText(academic.finishDate, {
+  userData.academicHistory.forEach(academic => {
+    pageN.drawText(academic.finishDate, {
       x: 14,
       y: yLeft,
       maxWidth: 285,
       font: font,
-      size: fontDate,
+      size: 10.5,
       color: rgb(0, 0, 0)
-    })
-    yLeft -= lineHeight
-    page.drawText(academic.title, {
+    });
+    yLeft -= 15;
+
+    pageN.drawText(academic.title, {
       x: 14,
       y: yLeft,
       maxWidth: 190,
-      lineHeight: lineHeight,
       font: fontBold,
-      size: academic.title.length > 22 ? fontDate : fontSubtitlesSize,
+      size: 13,
+      lineHeight: 15,
       color: rgb(0, 0, 0)
-    })// 60 caracteres
-    yLeft -= academic.title.length > 30 ? lineHeight * 2 : lineHeight
-    page.drawText(academic.institution, {
+    });
+    yLeft -= estimateTextHeight(academic.title, fontBold, 13, 285, 15);
+
+    pageN.drawText(academic.institution, {
       x: 14,
       y: yLeft,
       maxWidth: 190,
-      lineHeight: lineHeight,
       font: font,
-      size: fontTextSize,
+      size: 12,
+      lineHeight: 15,
       color: rgb(0, 0, 0)
-    })// 60 caracteres
-    yLeft -= academic.institution.length > 30 ? lineHeight * 3 : lineHeight * 2
-  })
+    });
+    yLeft -= estimateTextHeight(academic.institution, font, 12, 285, 25);
+  });
 
-  //* ---------------------------------------------- Right ---------------------------------------------- *\\
-
-  //!TODO Name //
-  page.drawText(userData.userName, {
+  // * ------------------------------------------- Sección derecha ---------------------------------------------
+  pageN.drawText(userData.userName, {
     x: 265,
     y: yRight,
     maxWidth: 285,
     font: fontBold,
-    size: fontTitleSize,
+    size: 25,
     color: rgb(0, 0, 0)
-  })
-  yRight -= userData.userName.length > 21 ? lineHeight * 3 + 5 : lineHeight + 10
+  });
+  yRight -= estimateTextHeight(userData.userName, fontBold, 25, 285, 25);
 
-  //!TODO Profession //
-  page.drawText(userData.profession, {
+  pageN.drawText(userData.profession, {
     x: 265,
-    y: yRight,
+    y: checkNewPage(),
+    maxWidth: 285,
     font: font,
-    size: fontSubtitlesSize + 2,
+    size: 16,
+    lineHeight: 15,
     color: rgb(0, 0, 0)
-  }) // máximo 32 caracteres
-  yRight -= division
+  });
+  yRight -= estimateTextHeight(userData.profession, font, 16, 285, 25);
 
-  //? Text Perfil profesional //
-  page.drawText('PERFIL PROFESIONAL', {
-    x: 230,
-    y: yRight,
-    size: fontSubtitlesSize,
-    font: fontBold,
-    color: rgb(0, 0, 0)
-  })
-  yRight -= lineHeight + 10
+  drawSectionHeader('PERFIL PROFESIONAL', 230, checkNewPage());
+  yRight -= 25;
 
-  //!TODO Profile //
-  page.drawText(userData.profile, {
+  pageN.drawText(userData.profile, {
     x: 230,
-    y: yRight,
-    maxWidth: maxWidth,
-    lineHeight: lineHeight,
+    y: checkNewPage(),
+    maxWidth: 340,
+    lineHeight: 15,
     font: font,
-    size: fontTextSize,
+    size: 12,
     color: rgb(0, 0, 0)
-  })
-  const profileHeight = estimateTextHeight(userData.profile, font, fontTextSize, maxWidth, lineHeight)
-  yRight -= profileHeight + division * 2
+  });
+  yRight -= estimateTextHeight(userData.profile, font, 12, 340, 15) + 30;
+  checkNewPage()
 
-  //? Experiencia Laboral //
-  page.drawText('EXPERIENCIA LABORAL', {
-    x: 230,
-    y: yRight,
-    size: fontSubtitlesSize,
-    font: fontBold,
-    color: rgb(0, 0, 0)
-  })
-  yRight -= division
+  drawSectionHeader('EXPERIENCIA LABORAL', 230, checkNewPage());
+  yRight -= 25;
 
-  //!TODO Experiencia Laboral //
-  userData.workHistory.map((work) => {
-    if (yRight <= 200) {
-      page = pdfDoc.addPage(PageSizes.A4)
-      pageDesign(page, rgb, degrees)
-      yRight = 760
-    }
-    page.drawText(work.company, {
+  userData.workHistory.forEach(work => {
+    pageN.drawText(work.company, {
       x: 230,
       y: yRight,
-      maxWidth: maxWidth,
-      lineHeight: lineHeight,
+      maxWidth: 340,
       font: fontBold,
-      size: fontSubtitlesSize,
+      size: 14,
+      lineHeight: 15,
       color: rgb(0, 0, 0)
-    })
-    const companyHeight = estimateTextHeight(work.company, fontBold, fontTextSize, maxWidth, lineHeight)
-    yRight -= companyHeight
-    page.drawText(work.workstation, {
-      x: 230,
-      y: yRight,
-      maxWidth: maxWidth,
-      font: font,
-      size: fontSubtitlesSize,
-      color: rgb(0, 0, 0)
-    })
-    yRight -= lineHeight
-    page.drawText(`${work.startDate} - ${work.finishDate}`, {
-      x: 230,
-      y: yRight,
-      maxWidth: maxWidth,
-      lineHeight: lineHeight,
-      font: font,
-      size: fontDate,
-      color: rgb(0, 0, 0)
-    })
-    yRight -= lineHeight
-    page.drawText(work.directSupervisor, {
-      x: 230,
-      y: yRight,
-      maxWidth: maxWidth,
-      font: font,
-      size: fontDate,
-      color: rgb(0, 0, 0)
-    })
-    yRight -= lineHeight
-    page.drawText(work.contactSupervisor, {
-      x: 230,
-      y: yRight,
-      maxWidth: maxWidth,
-      font: font,
-      size: fontDate,
-      color: rgb(0, 0, 0)
-    })
-    yRight -= lineHeight
-    page.drawText(work.functions, {
-      x: 230,
-      y: yRight,
-      maxWidth: maxWidth,
-      lineHeight: lineHeight,
-      font: font,
-      size: fontDate,
-      color: rgb(0, 0, 0)
-    })
-    const functionHeight = estimateTextHeight(work.functions, font, fontTextSize, maxWidth, lineHeight)
-    yRight -= functionHeight + division
-  })
+    });
+    yRight -= estimateTextHeight(work.company, fontBold, 14, 340, 15);
+    checkNewPage()
 
-  //? Text Referencias //
-  page.drawText('REFERENCIAS PERSONALES', {
-    x: 230,
-    y: yRight,
-    size: fontSubtitlesSize,
-    font: fontBold,
-    color: rgb(0, 0, 0)
-  })
-  yRight -= division
+    pageN.drawText(work.workstation, {
+      x: 230,
+      y: yRight,
+      maxWidth: 340,
+      font: font,
+      size: 14,
+      lineHeight: 15,
+      color: rgb(0, 0, 0)
+    });
+    yRight -= estimateTextHeight(work.workstation, font, 14, 340, 15);
+    checkNewPage()
 
-  //!TODO Referencias personales //
-  page.drawText(userData.personalReferences[0].name, {
-    x: 230,
-    y: yRight,
-    size: fontSubtitlesSize,
-    font: fontBold,
-    color: rgb(0, 0, 0)
-  }) // max 16 caracteres
-  yRight -= lineHeight
-  page.drawText(userData.personalReferences[0].profession, {
-    x: 230,
-    y: yRight,
-    size: fontSubtitlesSize,
-    font: font,
-    color: rgb(0, 0, 0)
-  })
-  yRight -= lineHeight
-  page.drawText(userData.personalReferences[0].contact, {
-    x: 230,
-    y: yRight,
-    size: fontSubtitlesSize,
-    font: font,
-    color: rgb(0, 0, 0)
-  })
-  yRight -= lineHeight
+    pageN.drawText(`${work.startDate} - ${work.finishDate}`, {
+      x: 230,
+      y: yRight,
+      maxWidth: 340,
+      font: font,
+      size: 10.5,
+      color: rgb(0, 0, 0)
+    });
+    yRight -= 15;
+    checkNewPage()
 
-  //!TODO Referencias personales 2//
-  page.drawText(userData.personalReferences[0].name2, {
-    x: 420,
-    y: yRight + 45,
-    size: fontSubtitlesSize,
-    font: fontBold,
-    color: rgb(0, 0, 0)
-  })// max 16 caracteres
-  yRight -= lineHeight
-  page.drawText(userData.personalReferences[0].profession2, {
-    x: 420,
-    y: yRight + 45,
-    size: fontSubtitlesSize,
-    font: font,
-    color: rgb(0, 0, 0)
-  })
-  yRight -= lineHeight
-  page.drawText(userData.personalReferences[0].contact2, {
-    x: 420,
-    y: yRight +45,
-    size: fontSubtitlesSize,
-    font: font,
-    color: rgb(0, 0, 0)
-  })
-  yRight -= lineHeight
-}
+    pageN.drawText(work.directSupervisor + " - " + work.contactSupervisor, {
+      x: 230,
+      y: yRight,
+      maxWidth: 340,
+      font: font,
+      size: 10.5,
+      color: rgb(0, 0, 0)
+    });
+    yRight -= 15;
+    checkNewPage()
+
+    pageN.drawText(work.functions, {
+      x: 230,
+      y: yRight,
+      // y: yRight = drawLongText(pdfDoc,pageN, work.functions, 230, yRight, 340, font, 12, 1.5),
+      maxWidth: 340,
+      size: 10.5,
+      lineHeight: 15,
+      font: font,
+      color: rgb(0, 0, 0)
+    });
+    yRight -= estimateTextHeight(work.functions, font, 12, 340, 15);
+    checkNewPage()
+  });
+
+  drawSectionHeader('REFERENCIAS PERSONALES', 230, checkNewPage());
+  yRight -= 25;
+  checkNewPage()
+
+  // Referencias personales
+  userData.personalReferences.forEach((reference) => {
+    let yRightReference1 = yRight
+    let yRightReference2 = yRight
+
+    pageN.drawText(reference.name, {
+      x: 230,
+      y: yRightReference1,
+      maxWidth: 150,
+      font: fontBold,
+      size: 14,
+      lineHeight: 15,
+      color: rgb(0, 0, 0)
+    });
+    yRightReference1 -= estimateTextHeight(reference.name, fontBold, 14, 150, 15)
+
+    pageN.drawText(reference.profession, {
+      x: 230,
+      y: yRightReference1,
+      font: font,
+      maxWidth: 150,
+      size: 14,
+      lineHeight: 15,
+      color: rgb(0, 0, 0)
+    });
+    yRightReference1 -= estimateTextHeight(reference.profession, font, 14, 150, 15)
+
+    pageN.drawText(reference.contact, {
+      x: 230,
+      y: yRightReference1,
+      font: font,
+      size: 14,
+      color: rgb(0, 0, 0)
+    });
+    yRightReference1 -= 25;
+
+    pageN.drawText(reference.name2, {
+      x: 420,
+      y: yRightReference2,
+      maxWidth: 150,
+      font: fontBold,
+      size: 14,
+      lineHeight: 15,
+      color: rgb(0, 0, 0)
+    });
+    yRightReference2 -= estimateTextHeight(reference.name2, fontBold, 14, 150, 15)
+
+    pageN.drawText(reference.profession2, {
+      x: 420,
+      y: yRightReference2,
+      font: font,
+      maxWidth: 150,
+      size: 14,
+      lineHeight: 15,
+      color: rgb(0, 0, 0)
+    });
+    yRightReference2 -= estimateTextHeight(reference.profession2, font, 14, 150, 15)
+
+    pageN.drawText(reference.contact2, {
+      x: 420,
+      y: yRightReference2,
+      font: font,
+      size: 14,
+      color: rgb(0, 0, 0)
+    });
+    yRightReference2 -= 25;
+  });
+};
+
+// const drawLongText = (pdfDoc, pageN, text, x, y, maxWidth, font, size, lineHeight) => {
+//   const paragraphs = text.split('\n') // Dividir por saltos de línea
+//   let lines = []
+
+//   paragraphs.forEach(paragraph => {
+//     const words = paragraph.split(/\s+/) // Dividir por espacios en blanco
+//     let currentLine = words[0]
+
+//     for (let i = 1; i < words.length; i++) {
+//       const word = words[i]
+//       const width = font.widthOfTextAtSize(currentLine + ' ' + word, size)
+
+//       if (width <= maxWidth) {
+//         currentLine += ' ' + word
+//       } else {
+//         lines.push(currentLine)
+//         currentLine = word
+//       }
+//     }
+
+//     if (currentLine.length > 0) {
+//       lines.push(currentLine)
+//     }
+//   })
+
+//   // Dibuja las líneas, creando nuevas páginas si es necesario
+//   lines.forEach(line => {
+//     const textHeight = font.heightAtSize(size) * lineHeight;
+
+//     // Verifica si hay espacio suficiente en la página actual
+//     if (y < textHeight) {
+//       pageN = pdfDoc.addPage(PageSizes.A4);
+//       pageDesign(pageN, rgb, degrees);
+//       y = 760; // Reset del valor de y en la nueva página
+//     }
+
+//     pageN.drawText(line, {
+//       x: x,
+//       y: y,
+//       font: font,
+//       size: size,
+//       color: rgb(0, 0, 0)
+//     });
+
+//     y -= textHeight;
+//   });
+
+//   return y;
+// };
 
 export const estimateTextHeight = (text, font, size, maxWidth, lineHeight) => {
   const paragraphs = text.split('\n') // Dividir por saltos de línea
